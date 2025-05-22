@@ -183,6 +183,62 @@
   }
 }
 
+@keyframes jerkup {
+  0% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-1px);
+  }
+  60% {
+    transform: translateY(0);
+  }
+  90% {
+    transform: translateY(1px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes on {
+  0% {
+    transform: scale(0, 0.1) translate(0, 0);
+    opacity: 1;
+  }
+  10% {
+    transform: scale(1, 0.1) translate(0, 0);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(1, 0.3) translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1, 1) translate(0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes off {
+  0% {
+    transform: scale(1, 1) translate(0, 0);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(1, 0.3) translate(0, 0);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(1, 0.1) translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0, 0.1) translate(0, 0);
+    opacity: 1;
+  }
+}
+
 .animate-glitch-1 {
   animation: glitch-1 500ms infinite linear alternate-reverse;
 }
@@ -200,9 +256,853 @@
 }
 
 .animate-static {
-  animation: static 500ms steps(10) infinite;
+  animation: static 1s infinite linear;
 }
 
 .animate-scanline {
-  animation: scanline 3s linear;
+  animation: scanline 3s linear infinite;
+}
+
+/* CRT TV specific */
+.scanlines::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 3px;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.scanlines::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAABmJLR0QA/wD/AP+gvaeTAAAFaElEQVR4nO3d7VXcRhTG8f8958Q0QFIBSQU4FQAVkFQQqCCkgkAFIRWEVABUQKiApALgHTpk33hGGr0M0kjm+dg5+OyZ+6xG0tzRSJAkSZIkSZIkSZIkSZIkSZIkDRAJL5v0FvgZ+CnKUwHrB/A38E+c8YOH7XXtklcCbR4FsYKbTXoF/ALcANcR3gr4BLwH3jfpQ5w8DowO/AJ813FbAXxo0n1H+UrGHqQFseK6Jj2p1F4AH2vSQZRnJ+Ap8Fe2vK5lN7XpIMozqRC+Ad9l698B3w5or1qbSXkWQn8EbOFl5Yyxyk7Ks9DoZR3nXmT0QVqgFcdjVjnJZKMNktT/W4bG7VrK9JhNzMozapAFrOqk4cYYpCU/w8sY3YLNUXaB2cQYpaYrRsZog4yx7PbGGGTpphekGCMjJHmmFySMwf/8UY0ySES2JVldY4zM0INcN+nnDsfPNEllDAYp9c2ybnZuDTGoTZLKGGVGDpJ2wKWekZUx6IoaI2NkjPYcEsaAgM24nU2rWYwmY0RzZbMG6Ri0+dkEydvKzsptM7UxwpilmyXI0nfAMTKqMUabZQmSV3Y7GKM0RrGM+QeZYwdcCgibWnbHDZI0Z9e7RDOVMeYZ5ExkDAoz6IrJM0jmSGbpGBOV14+Snjnr2QfpZsHKLo0xlTFq6p5lnbx5Mka5AS5Jnw4HNUfZXUbZlYK2rWZTy1PzDCDYGJOaNUia0+9VWTkLyaiNUYoVVm7qYBbPnXVnCZLU/1sGxV1AmZ3KGnNlrIzRlOV0b3fQ43T5GkHabOOFTyevzgB/NB/5Pt3aNcbo+HtLH7mMMUYcI1cGGSRg6EFafm6QVfbtbWk/t6jXt3ry2YLkl1XGCFL6LoBuRmjGhOQ55b6srA/ADzx2vW2tgJvtZ25vL/t2iyflOSh5HiQP0P7x7TPdfP8MfB7QnvJqM19+jR3+W9ljnkN8UqOZJ0ha/5fS3bVLPHkj6TMnQXJldnm5FVZ4gYFnGWV00Ro9eZYgiR+aPB03Ry3RyxpOz8aIA3b/tY8xvZgdcB+jJE/PjJdxSNkVMqozRi7PCbPZOYIUdvhjFNJzhBVZLcmz6nH8HIyx9Bhi6UF8Urdz0D4yJhVk6eYOssQuft+gw8s+lfQVrMW6Y5CWdA5ZeJ89l/Qtt74B2jV0ziFoS8cpukYxbK9rqeSmHyTI8jYxDjRG0qbfyxrOYTfF9TUy0r3slZFGZ4Jt42VPbpYgaY7sAeJx2w3wR0vKGGOQFlA4S83WI41Wd/wgE5bZpTNGsoK1s3/YnMsKa4wyuzqbQYZlGaNnpE3YGGG02hmpINTGCE/HYUMzRqRt2wM8LsE6L4AraWYyb2V3VXcUMvaBNxGH9TFGMkZtyjKy5YP3a0dkzLkPmVKe0b7A4FTB2tXntmqXXXZnkDEiY1SYtbIaydJnkMtmk35k3K6gNKsxgvDkyTNakIzJK7sy14FjFMvocQZ5ApQZIym7vRpj9EqeXRmLB2lJZ+4HZvr5u9KT5zjflP4dtXiQNE9WdpGlH2eMBYOkOeFMvVvQYRBWRqsyTjdGMMoyO8X+5q8+YXRTnmcGMOqedAypOaQYY8Z9SKnKjB2WXdpBnNYYC59D0iDlKruvA+s7/tQbYym7Zv6+i2u3niFjHWfOGGP2CqukZzZrbK4gqfJMNEYwMaOYXVZDz4TKqv4vjmPP1B3GJb8AAAAASUVORK5CYII=');
+  background-size: 100% 100%;
+  z-index: 30;
+  mix-blend-mode: overlay;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* TV on and off animations */
+.on .picture {
+  animation: on 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.off .picture {
+  animation: off 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* Menu animation */
+.menu {
+  animation: jerkup 200ms infinite;
+  position: relative;
+}
+
+/* Add a subtle glow to the menu */
+.menu::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.2) 0%, rgba(0, 0, 255, 0.1) 70%, transparent 100%);
+  filter: blur(10px);
+  z-index: -1;
+  opacity: 0.7;
+  animation: flicker 3s infinite alternate;
+}
+
+/* TV screen styles */
+.screen {
+  background-color: #121010;
+  overflow: hidden;
+  position: relative;
+  border-radius: 10px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* CRT TV glow */
+.screen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 0 0 30px rgba(0, 255, 0, 0.1), 
+              0 0 20px rgba(0, 255, 0, 0.1);
+  pointer-events: none;
+}
+
+/* Jumpscare specific animations */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-10px) rotate(-1deg); }
+  20%, 40%, 60%, 80% { transform: translateX(10px) rotate(1deg); }
+}
+
+@keyframes pulsate {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.05); filter: brightness(1.5); }
+}
+
+@keyframes zoom {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(5); }
+}
+
+@keyframes noise {
+  0%, 100% { background-position: 0 0; }
+  10% { background-position: -5% -10%; }
+  20% { background-position: -15% 5%; }
+  30% { background-position: 7% -25%; }
+  40% { background-position: 20% 25%; }
+  50% { background-position: -25% 10%; }
+  60% { background-position: 15% 5%; }
+  70% { background-position: 0% 15%; }
+  80% { background-position: 25% 35%; }
+  90% { background-position: -10% 10%; }
+}
+
+.animate-shake {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+}
+
+.animate-pulsate {
+  animation: pulsate 0.5s ease-in-out infinite;
+}
+
+.animate-zoom {
+  animation: zoom 1.5s ease-in-out forwards;
+}
+
+.animate-noise {
+  animation: noise 0.3s steps(8) infinite;
+}
+
+/* Add a blood drip effect */
+.blood-drip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(153, 0, 0, 0) 0%, rgba(153, 0, 0, 0.4) 100%);
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeIn 2s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* -------------------------
+   CRT TV Styling 
+   ------------------------- */
+
+@font-face {
+  src: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/86186/terminal_copy.ttf);
+  font-family: 'Terminal';
+  font-display: swap;
+}
+
+@font-face {
+  src: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/86186/sys.ttf) format('truetype');
+  font-family: 'Sys';
+  font-display: swap;
+}
+
+/* background when TV is off */
+.screen::before {
+  background: transparent linear-gradient(to bottom, #85908c 0%, #323431 100%) repeat scroll 0 0;
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* CRT scanlines */
+.scanlines .overlay {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scanlines .overlay::after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/86186/crt.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  content: "";
+}
+
+.scanlines .overlay::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  content: " ";
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+              linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+.picture {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  z-index: -1;
+  transform: scale(0, 0);
+  background: transparent linear-gradient(to bottom, #85908c 0%, #323431 100%) repeat scroll 0 0;
+}
+
+.menu {
+  opacity: 0;
+  background-color: #0069ff;
+  box-sizing: border-box;
+  font-family: "Sys", monospace;
+  font-size: 40px;
+  height: auto;
+  text-transform: uppercase;
+  width: 30%;
+  text-shadow: 1px 1px 0 #000000, -1px -1px 0 #000000, 1px -1px 0 #000000, -1px 1px 0 #000000;
+  filter: blur(1px);
+  color: #fff;
+  animation: jerkup 100ms infinite;
+}
+
+.menu header {
+  color: #e7e05c;
+  margin-bottom: 10px;
+  padding: 5px 15px;
+  animation: 5s ease 2000ms normal none infinite running glitch;
+}
+
+.menu ul {
+  margin: 0;
+  padding: 0;
+  animation: 5s ease 2000ms normal none infinite running glitch;
+}
+
+.menu ul li {
+  box-sizing: border-box;
+  list-style: outside none none;
+  padding: 5px 15px;
+}
+
+.menu ul li.active {
+  background-color: #1af2ff;
+}
+
+.menu ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.menu footer {
+  background-color: #2afd72;
+  margin-top: 10px;
+  padding: 5px 15px;
+  animation: 5s ease 2000ms normal none infinite running glitch;
+}
+
+.menu footer::after {
+  clear: both;
+  content: " ";
+  display: table;
+}
+
+.menu footer .key {
+  float: left;
+  width: 50%;
+}
+
+.menu footer .key span {
+  background-color: #0069ff;
+  border: 6px solid #e7e05c;
+  border-radius: 6px;
+  display: inline-block;
+  height: 34px;
+  line-height: 36px;
+  padding-left: 6px;
+}
+
+.menu footer .key:last-child {
+  text-align: right;
+}
+
+.on .picture {
+  animation: 3000ms linear 0ms normal forwards 1 running on;
+}
+
+.off .picture {
+  animation: 750ms cubic-bezier(0.230, 1.000, 0.320, 1.000) 0ms normal forwards 1 running off;
+}
+
+.text {
+  color: lime;
+  opacity: 0;
+  filter: blur(0.5px);
+  font-family: Sys, monospace;
+  font-size: 6vmin;
+  left: 5%;
+  position: absolute;
+  text-shadow: 0 0 3px lime;
+  top: 10%;
+  width: 200px;
+}
+
+.on .text, .on .menu {
+  opacity: 1;
+  transition: opacity 10ms ease 2000ms;
+}
+
+@keyframes on {
+  0% {
+    transform: scale(1, 0.8) translate3d(0, 0, 0);
+    filter: brightness(4);
+    opacity: 1;
+  }
+  3.5% {
+    transform: scale(1, 0.8) translate3d(0, 100%, 0);
+  }
+  3.6% {
+    transform: scale(1, 0.8) translate3d(0, -100%, 0);
+    opacity: 1;
+  }
+  9% {
+    transform: scale(1.3, 0.6) translate3d(0, 100%, 0);
+    filter: brightness(4);
+    opacity: 0;
+  }
+  11% {
+    transform: scale(1, 1) translate3d(0, 0, 0);
+    filter: contrast(0) brightness(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1, 1) translate3d(0, 0, 0);
+    filter: contrast(1) brightness(1.2) saturate(1.3);
+    opacity: 1;
+  }
+}
+
+@keyframes off {
+  0% {
+    transform: scale(1, 1);
+    filter: brightness(1);
+  }
+  40% {
+    transform: scale(1, 0.005);
+    filter: brightness(100);
+  }
+  70% {
+    transform: scale(1, 0.005);
+  }
+  90% {
+    transform: scale(0.005, 0.005);
+  }
+  100% {
+    transform: scale(0, 0);
+  }
+}
+
+.text span {
+  filter: blur(1px);
+  position: absolute;
+}
+
+.text span:nth-child(1) {
+  color: red;
+  margin-left: -2px;
+  filter: blur(2px);
+}
+
+.text span:nth-child(2) {
+  color: lime;
+  margin-left: 2px;
+  filter: blur(2px);
+  animation: jerkup 1s infinite;
+}
+
+.text span:nth-child(3) {
+  color: blue;
+  position: 20px 0;
+  filter: blur(1px);
+  animation: glitch1 1s infinite;
+}
+
+.text span:nth-child(4) {
+  color: #fff;
+  filter: blur(1px);
+  text-shadow: 0 0 50px rgba(255, 255, 255, 0.4);
+}
+
+.text span:nth-child(5) {
+  color: rgba(255, 255, 255, 0.1);
+  filter: blur(15px);
+}
+
+.text span {
+  animation: blur 30ms infinite, jerk 50ms infinite;
+}
+
+@keyframes blur {
+  0% {
+    filter: blur(1px);
+    opacity: 0.8;
+  }
+  50% {
+    filter: blur(1px);
+    opacity: 1;
+  }
+  100% {
+    filter: blur(1px);
+    opacity: 0.8;
+  }
+}
+
+@keyframes jerk {
+  50% {
+    transform: translateX(1px);
+  }
+  51% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes glitch1 {
+  0% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(0);
+  }
+  31% {
+    transform: translateX(10px);
+  }
+  32% {
+    transform: translateX(0);
+  }
+  98% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(10px);
+  }
+}
+
+@keyframes glitch2 {
+  0% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(0);
+  }
+  31% {
+    transform: translateX(-10px);
+  }
+  32% {
+    transform: translateX(0);
+  }
+  98% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-10px);
+  }
+}
+
+.overlay .text {
+  animation: 5s ease 2000ms normal none infinite running glitch;
+}
+
+@keyframes glitch {
+  40% {
+    opacity: 1;
+    transform: scale(1, 1);
+    transform: skew(0, 0);
+  }
+  41% {
+    opacity: 0.8;
+    transform: scale(1, 1.2);
+    transform: skew(80deg, 0);
+  }
+  42% {
+    opacity: 0.8;
+    transform: scale(1, 1.2);
+    transform: skew(-50deg, 0);
+  }
+  43% {
+    opacity: 1;
+    transform: scale(1, 1);
+    transform: skew(0, 0);
+  }
+}
+
+/* Jumpscare specific animations */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-10px) rotate(-1deg); }
+  20%, 40%, 60%, 80% { transform: translateX(10px) rotate(1deg); }
+}
+
+@keyframes pulsate {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.05); filter: brightness(1.5); }
+}
+
+@keyframes zoom {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(5); }
+}
+
+@keyframes noise {
+  0%, 100% { background-position: 0 0; }
+  10% { background-position: -5% -10%; }
+  20% { background-position: -15% 5%; }
+  30% { background-position: 7% -25%; }
+  40% { background-position: 20% 25%; }
+  50% { background-position: -25% 10%; }
+  60% { background-position: 15% 5%; }
+  70% { background-position: 0% 15%; }
+  80% { background-position: 25% 35%; }
+  90% { background-position: -10% 10%; }
+}
+
+.animate-shake {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+}
+
+.animate-pulsate {
+  animation: pulsate 0.5s ease-in-out infinite;
+}
+
+.animate-zoom {
+  animation: zoom 1.5s ease-in-out forwards;
+}
+
+.animate-noise {
+  animation: noise 0.3s steps(8) infinite;
+}
+
+/* Add a blood drip effect */
+.blood-drip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(153, 0, 0, 0) 0%, rgba(153, 0, 0, 0.4) 100%);
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeIn 2s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* For fullscreen mode */
+.min-h-screen .text {
+  left: 2%;
+  top: 2%;
+  width: auto;
+  z-index: 10;
+}
+
+.min-h-screen .menu {
+  width: auto;
+  min-width: 250px;
+}
+
+.min-h-screen .overlay {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .min-h-screen .overlay {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .min-h-screen .menu {
+    margin-top: 2rem;
+    width: 100%;
+  }
+}
+
+/* Adjust text styles for fullscreen mode */
+.text-left h1 {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  filter: blur(0.5px);
+  animation: glitch 5s ease 2000ms normal none infinite;
+}
+
+.text-left p {
+  filter: blur(0.5px);
+  animation: jerkup 500ms infinite;
+  text-shadow: 1px 1px 3px rgba(0, 255, 0, 0.5);
+}
+
+/* Content container inside the CRT TV */
+.content-container {
+  width: 100%;
+  height: 100%;
+  min-height: 80vh;
+  position: relative;
+  z-index: 5;
+  overflow-y: auto;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.1);
+}
+
+.content-container h2 {
+  color: #e7e05c;
+  text-shadow: 0 0 8px rgba(231, 224, 92, 0.6);
+  animation: glitch 10s ease 2000ms normal none infinite;
+}
+
+.content-container p {
+  color: #cccccc;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.9);
+  animation: jerkup 3s infinite;
+  filter: blur(0.3px);
+}
+
+/* Back to menu button */
+button.bg-red-500 {
+  font-family: "Sys", monospace;
+  text-transform: uppercase;
+  font-size: 16px;
+  border: 2px solid #fff;
+  transition: all 0.2s;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  animation: flicker 5s infinite alternate;
+}
+
+button.bg-red-500:hover {
+  background-color: #ff3300 !important;
+  transform: scale(1.05);
+}
+
+/* Glitch text effect for the title */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+  animation: textShadow 1.5s infinite;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text::before {
+  left: 2px;
+  text-shadow: -1px 0 #ff0000;
+  animation: glitch-1 0.5s infinite linear alternate-reverse;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch-text::after {
+  left: -2px;
+  text-shadow: 1px 0 #00ffff;
+  animation: glitch-2 0.7s infinite linear alternate-reverse;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+@keyframes textShadow {
+  0% {
+    text-shadow: 0.4px 0 1px rgba(0, 30, 255, 0.5), -0.4px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  5% {
+    text-shadow: 2.8px 0 1px rgba(0, 30, 255, 0.5), -2.8px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  10% {
+    text-shadow: 0.2px 0 1px rgba(0, 30, 255, 0.5), -0.2px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  15% {
+    text-shadow: 0.4px 0 1px rgba(0, 30, 255, 0.5), -0.4px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  20% {
+    text-shadow: 2.8px 0 1px rgba(0, 30, 255, 0.5), -2.8px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  25% {
+    text-shadow: 1.8px 0 1px rgba(0, 30, 255, 0.5), -1.8px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  30% {
+    text-shadow: 0.4px 0 1px rgba(0, 30, 255, 0.5), -0.4px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  35% {
+    text-shadow: 1.9px 0 1px rgba(0, 30, 255, 0.5), -1.9px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  40% {
+    text-shadow: 2.8px 0 1px rgba(0, 30, 255, 0.5), -2.8px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  45% {
+    text-shadow: 0.3px 0 1px rgba(0, 30, 255, 0.5), -0.3px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  50% {
+    text-shadow: 0.7px 0 1px rgba(0, 30, 255, 0.5), -0.7px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  55% {
+    text-shadow: 2.9px 0 1px rgba(0, 30, 255, 0.5), -2.9px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  60% {
+    text-shadow: 2.3px 0 1px rgba(0, 30, 255, 0.5), -2.3px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  65% {
+    text-shadow: 0.3px 0 1px rgba(0, 30, 255, 0.5), -0.3px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  70% {
+    text-shadow: 0.7px 0 1px rgba(0, 30, 255, 0.5), -0.7px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  75% {
+    text-shadow: 1.9px 0 1px rgba(0, 30, 255, 0.5), -1.9px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  80% {
+    text-shadow: 0.3px 0 1px rgba(0, 30, 255, 0.5), -0.3px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  85% {
+    text-shadow: 0.7px 0 1px rgba(0, 30, 255, 0.5), -0.7px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  90% {
+    text-shadow: 2.8px 0 1px rgba(0, 30, 255, 0.5), -2.8px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  95% {
+    text-shadow: 0.3px 0 1px rgba(0, 30, 255, 0.5), -0.3px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+  100% {
+    text-shadow: 2.8px 0 1px rgba(0, 30, 255, 0.5), -2.8px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+  }
+}
+
+/* Additional fullscreen styling */
+.h-screen .overlay {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.h-screen .screen {
+  height: 100vh;
+  background: linear-gradient(to bottom, #000000, #111111);
+  box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
+}
+
+/* Enhance the CRT TV border */
+.border-gray-800 {
+  box-shadow: 
+    0 0 0 4px #2a2a2a,
+    0 0 0 8px #1a1a1a,
+    0 0 15px rgba(0, 0, 0, 0.8),
+    inset 0 0 15px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+}
+
+/* Make the TV screen slightly curved */
+.screen {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* TV on animation enhancement */
+.on .picture {
+  animation-duration: 2s;
+}
+
+/* Enhance scanlines effect */
+.scanlines::before {
+  background-size: 100% 2px;
+  opacity: 0.3;
+}
+
+/* Enhance the JAV GOONER text */
+.text {
+  font-size: 2vmin;
+  left: 2%;
+  top: 2%;
+}
+
+/* Media queries for responsive layouts */
+@media (max-width: 768px) {
+  .flex.h-full {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .text-left.mt-20 {
+    margin-top: 0;
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 0 1rem;
+  }
+  
+  .menu.mr-10 {
+    margin-right: 0;
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .text-5xl {
+    font-size: 2rem;
+  }
+  
+  .md\:text-8xl {
+    font-size: 3rem;
+  }
 }

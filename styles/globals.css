@@ -128,6 +128,29 @@
     90% { transform: translate(-5%, -5%); }
     100% { transform: translate(0, 0); }
   }
+
+  .animate-fade-in-out {
+    animation: fade-in-out 2s ease-in-out;
+  }
+
+  @keyframes fade-in-out {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    20% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    80% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
 }
 
 @keyframes glitch-1 {

@@ -45,7 +45,7 @@ export function Projects() {
         </h2>
         <p className="text-gray-400 max-w-2xl font-mono">
           <GlitchText
-            text="Digital manifestations of cognitive processes. Each project is a fragment of a larger system."
+            text="gooning manifestations of cognitive processes. Each project is a fragment of a larger system."
             isActive={Math.random() > 0.9}
           />
         </p>

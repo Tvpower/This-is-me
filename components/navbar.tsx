@@ -24,7 +24,7 @@ export function Navbar() {
     <nav className="py-4 px-6 relative z-10">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-2xl font-bold relative">
-          <GlitchText text="DEV.MIND" isActive={glitching} />
+          <GlitchText text="GOON.MIND" isActive={glitching} />
         </Link>
 
         <div className="hidden md:flex space-x-1">

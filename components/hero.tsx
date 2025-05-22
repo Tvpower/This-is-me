@@ -1,10 +1,11 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
 import { GlitchText } from "@/components/glitch-text"
 import { GlitchImage } from "@/components/glitch-image"
 import { cn } from "@/lib/utils"
+import AnimatedEyes from '@/components/AnimatedEyes'
+import SchizoText from '@/components/schizo-text'
 
 export function Hero() {
   const [glitchTitle, setGlitchTitle] = useState(false)
@@ -12,7 +13,6 @@ export function Hero() {
   const [scrambledText, setScrambledText] = useState(false)
   const [showWarning, setShowWarning] = useState(false)
   const [showCoordinates, setShowCoordinates] = useState(false)
-
   useEffect(() => {
     const titleInterval = setInterval(
         () => {
@@ -108,7 +108,7 @@ export function Hero() {
 
                      <p className={cn("text-lg md:text-xl text-gray-400 font-mono", scrambledText && "text-red-500")}>
               <GlitchText
-                  text="Creating digital experiences from the fragments of reality.\nI WANT TO KNOW IT ALL.\nYour new line here."
+                  text="Creating gooning experiences from the fragments of reality. I WANT TO KNOW IT ALL."
                   isActive={glitchSubtitle}
                   intensity="high"
               />
@@ -145,7 +145,7 @@ export function Hero() {
             <div className="absolute inset-0 border-2 border-dashed border-blue-500/20 translate-x-4 -translate-y-4" />
 
             <GlitchImage
-                src="/placeholder.svg?height=600&width=600"
+                src="/IMG_1550.jpg?height=600&width=600"
                 alt="Developer Portrait"
                 width={600}
                 height={600}
@@ -171,6 +171,9 @@ export function Hero() {
             </div>
           </div>
         </div>
+
+        <AnimatedEyes numberOfEyes={8} className="z-30" />
+        <SchizoText className="z-30" />
       </section>
   )
 }
