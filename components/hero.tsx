@@ -108,7 +108,7 @@ export function Hero() {
 
                      <p className={cn("text-lg md:text-xl text-gray-400 font-mono", scrambledText && "text-red-500")}>
               <GlitchText
-                  text="Creating gooning experiences from the fragments of reality. I WANT TO KNOW IT ALL."
+                  text="Creating experiences from the fragments of reality. I WANT TO KNOW IT ALL."
                   isActive={glitchSubtitle}
                   intensity="high"
               />

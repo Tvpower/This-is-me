@@ -62,7 +62,7 @@ export function Skills() {
         </h2>
         <p className="text-gray-400 max-w-2xl font-mono">
           <GlitchText
-            text="Technical capabilities and cognitive extensions. Tools for manipulating gooning reality."
+            text="Technical capabilities and cognitive extensions. Tools for manipulating reality."
             isActive={Math.random() > 0.9}
           />
         </p>

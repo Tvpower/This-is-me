@@ -72,7 +72,7 @@ export function Contact() {
             <div className="space-y-4 font-mono">
               <div className="flex items-center gap-3">
                 <div className="w-3 h-3 bg-red-500 animate-pulse" />
-                <span>developer@gooning-mind.io</span>
+                <span>mariopinzonjbb@outlook.com</span>
               </div>
 
               <div className="flex items-center gap-3">
@@ -82,7 +82,7 @@ export function Contact() {
 
               <div className="flex items-center gap-3">
                 <div className="w-3 h-3 bg-green-500 animate-pulse" />
-                <span>@gooning_mind_dev</span>
+                <span>@https://x.com/M4skedTv</span>
               </div>
             </div>
 
