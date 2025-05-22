@@ -15,14 +15,21 @@ export function Jumpscare({ onClose }: JumpscareProps) {
 
   // Create audio element for the scary sound
   useEffect(() => {
-    const audioElement = new Audio("/jumpscare-sound.mp3")
-    audioElement.volume = 0.7
-    setAudio(audioElement)
+    try {
+      const audioElement = new Audio()
+      audioElement.src = "/jumpscare-sound.mp3"
+      audioElement.volume = 0.7
+      audioElement.preload = "auto"
+      setAudio(audioElement)
 
-    return () => {
-      if (audioElement) {
-        audioElement.pause()
+      return () => {
+        if (audioElement) {
+          audioElement.pause()
+          audioElement.src = ""
+        }
       }
+    } catch (error) {
+      console.warn("Audio not supported:", error)
     }
   }, [])
 
@@ -97,7 +104,7 @@ export function Jumpscare({ onClose }: JumpscareProps) {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="relative w-full h-full flex justify-center items-center">
                 <Image 
-                  src="/mario-jumpscare.png" 
+                  src="/IMG_1550.jpg"
                   alt="Jumpscare" 
                   width={800} 
                   height={800}
@@ -115,7 +122,7 @@ export function Jumpscare({ onClose }: JumpscareProps) {
               <div className="absolute inset-0 flex items-center justify-center animate-glitch-1 opacity-70">
                 <div className="relative w-full h-full flex justify-center items-center">
                   <Image 
-                    src="/mario-jumpscare.png" 
+                    src="/mario-jumpscare.jpeg"
                     alt="Jumpscare" 
                     width={800} 
                     height={800}
@@ -131,7 +138,7 @@ export function Jumpscare({ onClose }: JumpscareProps) {
               <div className="absolute inset-0 flex items-center justify-center animate-glitch-3 opacity-70">
                 <div className="relative w-full h-full flex justify-center items-center">
                   <Image 
-                    src="/mario-jumpscare.png" 
+                    src="/mario-jumpscare.jpeg"
                     alt="Jumpscare" 
                     width={800} 
                     height={800}

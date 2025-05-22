@@ -7,19 +7,27 @@ import { cn } from "@/lib/utils"
 const skillCategories = [
   {
     name: "FRONTEND",
-    skills: ["React", "Next.js", "Three.js", "WebGL", "GLSL", "CSS/SCSS", "Framer Motion"],
+    skills: ["React", "Vue.js", "React Native", "Svelte", "Angular", "HTML", "CSS/SCSS", "TailwindCSS", "Bootstrap", "Jekyll", "Hugo", "Sphinx"],
   },
   {
     name: "BACKEND",
-    skills: ["Node.js", "Express", "GraphQL", "PostgreSQL", "MongoDB", "Redis", "WebSockets"],
+    skills: ["Node.js", "Express", "Django", "Flask", "FastAPI", "GraphQL", "PostgreSQL", "MongoDB", "Elasticsearch", "PHP", "Hydrogen"],
   },
   {
     name: "LANGUAGES",
-    skills: ["JavaScript", "TypeScript", "Python", "Rust", "C++", "WebAssembly"],
+    skills: ["C++", "Python", "Rust", "TypeScript", "CUDA", "Go", "Java", "C", "SystemVerilog", "Assembly", "Zig"],
+  },
+  {
+    name: "AI/ML",
+    skills: ["TensorFlow", "PyTorch", "GANs", "Transformers", "Neural Networks", "Reinforcement Learning", "Computer Vision", "NLP"],
+  },
+  {
+    name: "EMBEDDED",
+    skills: ["ARM Cortex-M4", "STM32F407", "FreeRTOS", "ROS", "QEMU", "LTspice", "AMD Vivado"],
   },
   {
     name: "TOOLS",
-    skills: ["Git", "Docker", "AWS", "Vercel", "Figma", "TensorFlow.js", "Neural Networks"],
+    skills: ["Git", "Docker", "AWS", "Azure", "Vercel", "Figma", "TensorFlow.js", "Neural Networks"],
   },
 ]
 

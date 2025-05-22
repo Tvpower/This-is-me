@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Hero } from "@/components/hero"
 import { Skills } from "@/components/skills"
 import { Contact } from "@/components/contact"
@@ -16,12 +16,29 @@ export default function Home() {
         setActiveSection(option)
     }
 
+    const handleBackToMenu = () => {
+        setShowFrontScreen(true)
+        setActiveSection(null)
+    }
+
+    // Add keyboard event handler
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "1" && !showFrontScreen) {
+                handleBackToMenu()
+            }
+        }
+
+        window.addEventListener("keydown", handleKeyDown)
+        return () => window.removeEventListener("keydown", handleKeyDown)
+    }, [showFrontScreen])
+
     // Render the active section content
     const renderContent = () => {
         switch (activeSection) {
-            case "picture":
+            case "me":
                 return <Hero />
-            case "sound":
+            case "stack":
                 return <Skills />
             case "about":
                 return (
@@ -56,16 +73,21 @@ export default function Home() {
                                     <span>LIVE</span>
                                 </div>
                                 <div className="screen relative w-full h-full">
-                                    <div className="content-container p-4">
+                                    <div className="content-container p-4 relative">
                                         {renderContent()}
+                                        
+                                        <button 
+                                            className="fixed top-4 right-4 bg-red-500 px-4 py-2 rounded-md hover:bg-red-600 transition-colors z-50"
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                e.stopPropagation()
+                                                handleBackToMenu()
+                                            }}
+                                            type="button"
+                                        >
+                                            Back to Menu
+                                        </button>
                                     </div>
-                                    
-                                    <button 
-                                        className="absolute top-4 right-4 bg-red-500 px-4 py-2 rounded-md"
-                                        onClick={() => setShowFrontScreen(true)}
-                                    >
-                                        Back to Menu
-                                    </button>
                                 </div>
                             </div>
                         </div>
