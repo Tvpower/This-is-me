@@ -8,27 +8,47 @@ import { cn } from "@/lib/utils"
 const projects = [
   {
     id: 1,
-    title: "NEURAL INTERFACE",
-    description:
-      "A mind-machine interface for direct thought-to-code translation. Built with React, TensorFlow, and BrainJS.",
+    title: "Advanced RFID Simulation System for Robotics",
+    description: "Pioneered a cutting-edge RFID simulation plugin for the Gazebo robotics simulator, enabling realistic tag-reader interactions in virtual environments. Engineered a high-performance C++ simulation system capable of handling hundreds of RFID tags with realistic detection ranges. Developed seamless ROS integration allowing robotic systems to utilize simulated RFID data identically to real-world sensor data. Open-sourced the complete solution, contributing to the global robotics community and enabling faster prototyping of RFID-based robotic systems.",
     image: "/placeholder.svg?height=400&width=600",
-    tags: ["React", "TensorFlow", "Neural Networks", "WebGL"],
+    tags: ["C++", "ROS", "Gazebo", "Robotics", "Simulation"],
   },
   {
     id: 2,
-    title: "REALITY PARSER",
-    description:
-      "Deconstructs visual input into algorithmic patterns. Identifies hidden structures in everyday objects.",
+    title: "Campus Navigator",
+    description: "Integrated Flask framework to create a full-stack site for campus navigation. Utilized Map Nodes and Dijkstra's algorithm to improve navigation speeds and path efficiency by 22%. Implemented JS front end with Python backend.",
     image: "/placeholder.svg?height=400&width=600",
-    tags: ["Three.js", "Computer Vision", "WebAssembly", "GLSL"],
+    tags: ["Django", "Data Structures", "JavaScript", "Flask"],
+    isChampion: true,
   },
   {
     id: 3,
-    title: "THOUGHT COMPILER",
-    description:
-      "Converts abstract concepts into executable code. Translates between human thought patterns and machine logic.",
+    title: "Chat App",
+    description: "Utilized QT libraries to set up an easy to read UI. Implemented Multiple threads to efficiently receive and send messages in an orderly manner. Established a local network to facilitate communication among various computers within LAN environments.",
     image: "/placeholder.svg?height=400&width=600",
-    tags: ["TypeScript", "NLP", "GraphQL", "Next.js"],
+    tags: ["C++", "Qt", "Windows Networking"],
+  },
+  {
+    id: 4,
+    title: "Cuda Neural Network",
+    description: "Engineered High-Performance CUDA Neural Network capable of processing data 87x faster than CPU implementations. Developed Real-Time 3D Network Visualization Tool allowing intuitive inspection of neural network training dynamics. Implemented Interactive Layer Exploration Features enabling deep inspection and troubleshooting of model behavior. Optimized Memory Management reducing VRAM usage by 63% while maintaining visualization quality. Created Training Evolution View showing animated progression of network learning, crucial for stakeholder demonstrations.",
+    image: "/placeholder.svg?height=400&width=600",
+    tags: ["CUDA", "Neural Networks", "C++", "3D Visualization", "Performance Optimization"],
+  },
+  {
+    id: 5,
+    title: "Mantis_ShrimpOS - Custom Operative System",
+    description: "Architected and engineered a fully custom, bare-metal operating system from the ground up, implementing critical kernel functionalities and hardware abstraction layers that established robust communication between software and underlying hardware components. Designed and implemented UEFI bootloader systems utilizing GNU-EFI framework, enabling seamless system initialization across various hardware platforms while maintaining compatibility with modern firmware interfaces. Engineered a comprehensive memory management subsystem featuring virtual memory implementation, efficient paging mechanisms, and memory protection features, dramatically improving system security and resource allocation. Developed a modular kernel infrastructure with extensible architecture allowing for future feature expansion, third-party driver integration, and system optimization without compromising core system stability.",
+    image: "/placeholder.svg?height=400&width=600",
+    tags: ["Operating Systems", "Kernel Development", "UEFI", "C", "Assembly", "Memory Management"],
+  },
+  {
+    id: 6,
+    title: "SustainableEnergy",
+    description: "Developed a map website to indicate the best places to build solar panels depending on the solar insolation on that specific area. Implemented Wolfram Alpha API to get necessary information and make calculations on specific areas of the map. Collaborated with other team members to ensure consistent work operations.",
+    image: "/placeholder.svg?height=400&width=600",
+    tags: ["Svelte", "OpenAI API", "Wolfram Language"],
+    isChampion: true,
   },
 ]
 
@@ -80,6 +100,11 @@ export function Projects() {
             />
 
             <div className="p-6">
+              {project.isChampion && (
+                <div className="mb-2 text-sm font-semibold text-yellow-400 flex items-center">
+                  <span className="mr-1">🏆</span> Champion Project
+                </div>
+              )}
               <h3 className="text-xl font-bold mb-2">
                 <GlitchText text={project.title} isActive={glitchingProject === project.id} intensity="medium" />
               </h3>

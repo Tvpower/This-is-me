@@ -6,6 +6,7 @@ import { GlitchImage } from "@/components/glitch-image"
 import { cn } from "@/lib/utils"
 import AnimatedEyes from '@/components/AnimatedEyes'
 import SchizoText from '@/components/schizo-text'
+import Link from 'next/link'
 
 export function Hero() {
   const [glitchTitle, setGlitchTitle] = useState(false)
@@ -116,17 +117,23 @@ export function Hero() {
                 </p>
 
                 <div className="pt-4 flex flex-wrap gap-4">
-                  <button className="relative px-8 py-3 bg-red-900/30 border border-red-500/50 text-red-500 hover:bg-red-900/50 transition-colors group overflow-hidden">
-                  <span className="relative z-10">
-                    <GlitchText text="VIEW PROJECTS" isActive={Math.random() > 0.6} intensity="high" />
-                  </span>
+                  <button 
+                    onClick={() => window.dispatchEvent(new CustomEvent('menuSelect', { detail: 'stack' }))}
+                    className="relative px-8 py-3 bg-red-900/30 border border-red-500/50 text-red-500 hover:bg-red-900/50 transition-colors group overflow-hidden"
+                  >
+                    <span className="relative z-10">
+                      <GlitchText text="VIEW PROJECTS" isActive={Math.random() > 0.6} intensity="high" />
+                    </span>
                     <span className="absolute inset-0 bg-glitch-red opacity-0 group-hover:opacity-20 transition-opacity" />
                   </button>
 
-                  <button className="relative px-8 py-3 bg-blue-900/30 border border-blue-500/50 text-blue-500 hover:bg-blue-900/50 transition-colors group overflow-hidden">
-                  <span className="relative z-10">
-                    <GlitchText text="CONTACT ME" isActive={Math.random() > 0.6} intensity="high" />
-                  </span>
+                  <button 
+                    onClick={() => window.dispatchEvent(new CustomEvent('menuSelect', { detail: 'contact' }))}
+                    className="relative px-8 py-3 bg-blue-900/30 border border-blue-500/50 text-blue-500 hover:bg-blue-900/50 transition-colors group overflow-hidden"
+                  >
+                    <span className="relative z-10">
+                      <GlitchText text="CONTACT ME" isActive={Math.random() > 0.6} intensity="high" />
+                    </span>
                     <span className="absolute inset-0 bg-glitch-blue opacity-0 group-hover:opacity-20 transition-opacity" />
                   </button>
                 </div>

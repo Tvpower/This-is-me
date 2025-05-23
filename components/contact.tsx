@@ -30,21 +30,33 @@ export function Contact() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    // Simulate form submission with random success/failure
     setGlitchField("form")
 
-    setTimeout(() => {
-      setGlitchField(null)
-      if (Math.random() > 0.3) {
-        setFormSubmitted(true)
-      } else {
-        setFormError(true)
-        setTimeout(() => setFormError(false), 3000)
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formState),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message')
       }
-    }, 1000)
+
+      setFormSubmitted(true)
+      setFormState({ name: '', email: '', message: '' })
+    } catch (error) {
+      setFormError(true)
+      setTimeout(() => setFormError(false), 3000)
+    } finally {
+      setGlitchField(null)
+    }
   }
 
   return (
@@ -77,7 +89,7 @@ export function Contact() {
 
               <div className="flex items-center gap-3">
                 <div className="w-3 h-3 bg-blue-500 animate-pulse" />
-                <span>+1 (101) 010-1010</span>
+                <span>+1 (510) 205-2572</span>
               </div>
 
               <div className="flex items-center gap-3">

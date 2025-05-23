@@ -6,6 +6,8 @@ import { Skills } from "@/components/skills"
 import { Contact } from "@/components/contact"
 import { GlitchOverlay } from "@/components/glitch-overlay"
 import { CRTFrontScreen } from "@/components/crt-front-screen"
+import { Work } from "@/components/Work"
+import { About } from "@/components/about"
 
 export default function Home() {
     const [showFrontScreen, setShowFrontScreen] = useState(true)
@@ -29,8 +31,17 @@ export default function Home() {
             }
         }
 
+        const handleMenuSelectEvent = (e: CustomEvent) => {
+            handleMenuSelect(e.detail)
+        }
+
         window.addEventListener("keydown", handleKeyDown)
-        return () => window.removeEventListener("keydown", handleKeyDown)
+        window.addEventListener("menuSelect", handleMenuSelectEvent as EventListener)
+        
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown)
+            window.removeEventListener("menuSelect", handleMenuSelectEvent as EventListener)
+        }
     }, [showFrontScreen])
 
     // Render the active section content
@@ -39,18 +50,9 @@ export default function Home() {
             case "me":
                 return <Hero />
             case "stack":
-                return <Skills />
+                return <Work />
             case "about":
-                return (
-                    <section id="about" className="p-8">
-                        <h2 className="text-4xl font-bold mb-6 text-center">About</h2>
-                        <div className="bg-black/50 p-6 rounded-lg scanlines">
-                            <p className="text-lg mb-4">This is an experimental CRT TV interface for the web.</p>
-                            <p className="text-lg mb-4">The design mimics old cathode ray tube televisions with their characteristic scanlines, noise, and glitchy effects.</p>
-                            <p className="text-lg">Use the menu to navigate between different sections of the site.</p>
-                        </div>
-                    </section>
-                )
+                return <About />
             case "contact":
                 return <Contact />
             default:
@@ -72,12 +74,12 @@ export default function Home() {
                                 <div className="text">
                                     <span>LIVE</span>
                                 </div>
-                                <div className="screen relative w-full h-full">
+                                <div className="screen relative w-full h-full overflow-y-auto custom-scrollbar">
                                     <div className="content-container p-4 relative">
                                         {renderContent()}
                                         
                                         <button 
-                                            className="fixed top-4 right-4 bg-red-500 px-4 py-2 rounded-md hover:bg-red-600 transition-colors z-50"
+                                            className="absolute top-4 right-4 bg-red-500 px-4 py-2 rounded-md hover:bg-red-600 transition-colors z-50"
                                             onClick={(e) => {
                                                 e.preventDefault()
                                                 e.stopPropagation()

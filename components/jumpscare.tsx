@@ -17,8 +17,8 @@ export function Jumpscare({ onClose }: JumpscareProps) {
   useEffect(() => {
     try {
       const audioElement = new Audio()
-      audioElement.src = "/jumpscare-sound.mp3"
-      audioElement.volume = 0.7
+      audioElement.src = "/639668__classic__jumpscare.mp3"
+      audioElement.volume = 0.15
       audioElement.preload = "auto"
       setAudio(audioElement)
 
@@ -60,8 +60,8 @@ export function Jumpscare({ onClose }: JumpscareProps) {
       // After a delay, close the jumpscare
       timeouts.push(setTimeout(() => {
         setVisible(false)
-        setTimeout(() => onClose(), 1000)
-      }, 3500))
+        setTimeout(() => onClose(), 500)
+      }, 2500))
     }, 600)
     
     timeouts.push(flickerTimer)
@@ -104,7 +104,7 @@ export function Jumpscare({ onClose }: JumpscareProps) {
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="relative w-full h-full flex justify-center items-center">
                 <Image 
-                  src="/IMG_1550.jpg"
+                  src="/scary-ghost-on-dark-background.webp"
                   alt="Jumpscare" 
                   width={800} 
                   height={800}
