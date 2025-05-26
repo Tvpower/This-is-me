@@ -52,8 +52,14 @@ export function GlitchText({ text, isActive = false, className = "", intensity =
 
     const glitchChars = "!<>-_\\/[]{}—=+*^?#█▓▒░▄▀■@$%&()~`|"
     let iteration = 0
+    const targetText = text === "REALITY" ? "CRAZY" : text
 
     const interval = setInterval(() => {
+      if (text === "REALITY" && Math.random() < 0.3) {
+        setGlitchText(targetText)
+        return
+      }
+
       setGlitchText(
         text
           .split("")
