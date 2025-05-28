@@ -4,9 +4,9 @@ import { useState, useEffect } from "react"
 import { GlitchText } from "@/components/glitch-text"
 import { GlitchImage } from "@/components/glitch-image"
 import { cn } from "@/lib/utils"
-import AnimatedEyes from '@/components/AnimatedEyes'
 import SchizoText from '@/components/schizo-text'
 import Link from 'next/link'
+import AsciiEyes from '@/components/ascii-eyes'
 
 export function Hero() {
   const [glitchTitle, setGlitchTitle] = useState(false)
@@ -65,7 +65,7 @@ export function Hero() {
   }, [])
 
   return (
-      <section id="home" className="min-h-screen relative overflow-hidden">
+      <section id="home" className="h-full relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 bg-fading-background opacity-50"></div>
 
@@ -92,7 +92,7 @@ export function Hero() {
               </div>
           )}
 
-          <div className="min-h-screen flex items-center py-20 px-4">
+          <div className="h-full flex items-center py-20 px-4">
             <div className="grid md:grid-cols-2 gap-8 items-center relative z-10 w-full max-w-7xl mx-auto">
               <div className="space-y-6 max-w-xl">
                 <div className="relative">
@@ -182,7 +182,7 @@ export function Hero() {
           </div>
         </div>
 
-        <AnimatedEyes numberOfEyes={8} className="z-30" />
+        <AsciiEyes maxEyes={8} className="z-30" />
         <SchizoText className="z-30" />
       </section>
   )

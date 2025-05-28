@@ -74,8 +74,8 @@ export default function Home() {
                                 <div className="text">
                                     <span>LIVE</span>
                                 </div>
-                                <div className="screen relative w-full h-full overflow-y-auto custom-scrollbar">
-                                    <div className="content-container p-4 relative">
+                                <div className="screen relative w-full h-full">
+                                    <div className="content-container p-4 relative h-full overflow-hidden">
                                         {renderContent()}
                                         
                                         <button 
