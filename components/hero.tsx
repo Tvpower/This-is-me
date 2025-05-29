@@ -182,7 +182,12 @@ export function Hero() {
           </div>
         </div>
 
-        <AsciiEyes maxEyes={8} className="z-30" />
+        <AsciiEyes 
+          maxEyes={8} 
+          className="z-30 hidden md:block" 
+          startupDelay={3000}
+          initialSpawnDelay={2000}
+        />
         <SchizoText className="z-30" />
       </section>
   )

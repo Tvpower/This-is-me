@@ -8,6 +8,14 @@ interface SingleEyeProps {
   onDestroy?: () => void
 }
 
+enum EyeState {
+  APPEARING,
+  ALIVE,
+  BLINKING,
+  FADING,
+  DEAD
+}
+
 class SingleEye {
   x: number
   y: number
@@ -18,12 +26,27 @@ class SingleEye {
   maxPupilOffset: number = 3
   element: HTMLDivElement | null = null
   onDestroy?: () => void
+  state: EyeState = EyeState.APPEARING
+  
+  // Lifecycle timing
+  lifespan: number = 15000 + Math.random() * 10000 // 15-25 seconds
+  birthTime: number = Date.now()
+  
+  // Blinking
+  lastBlinkTime: number = Date.now()
+  blinkInterval: number = 2000 + Math.random() * 4000 // 2-6 seconds between blinks
+  blinkDuration: number = 150 + Math.random() * 100 // 150-250ms blink duration
+  isBlinking: boolean = false
+  
+  // Animation
+  opacity: number = 0
 
   constructor(x: number, y: number, container: HTMLElement, onDestroy?: () => void) {
     this.x = x
     this.y = y
     this.onDestroy = onDestroy
     this.createDOM(container)
+    this.startAppearAnimation()
   }
 
   createDOM(container: HTMLElement) {
@@ -31,7 +54,64 @@ class SingleEye {
     this.element.className = 'absolute whitespace-pre font-mono text-[10px] leading-[10px] font-bold select-none pointer-events-none text-red-500'
     this.element.style.left = this.x + 'px'
     this.element.style.top = this.y + 'px'
+    this.element.style.opacity = '0'
+    this.element.style.transition = 'opacity 0.5s ease-in-out'
     container.appendChild(this.element)
+  }
+
+  startAppearAnimation() {
+    // Fade in over 500ms
+    setTimeout(() => {
+      if (this.element) {
+        this.element.style.opacity = '1'
+        this.opacity = 1
+        this.state = EyeState.ALIVE
+      }
+    }, 50)
+  }
+
+  startFadeAnimation() {
+    this.state = EyeState.FADING
+    if (this.element) {
+      this.element.style.opacity = '0'
+      // Destroy after fade animation completes
+      setTimeout(() => {
+        this.destroy()
+      }, 500)
+    }
+  }
+
+  updateLifecycle() {
+    const now = Date.now()
+    const age = now - this.birthTime
+    
+    // Check if it's time to start fading
+    if (this.state === EyeState.ALIVE && age >= this.lifespan) {
+      this.startFadeAnimation()
+      return
+    }
+    
+    // Handle blinking
+    if (this.state === EyeState.ALIVE) {
+      const timeSinceLastBlink = now - this.lastBlinkTime
+      
+      if (!this.isBlinking && timeSinceLastBlink >= this.blinkInterval) {
+        // Start blink
+        this.isBlinking = true
+        this.state = EyeState.BLINKING
+        this.lastBlinkTime = now
+        
+        // End blink after duration
+        setTimeout(() => {
+          if (this.state === EyeState.BLINKING) {
+            this.isBlinking = false
+            this.state = EyeState.ALIVE
+            // Set next blink interval
+            this.blinkInterval = 2000 + Math.random() * 4000
+          }
+        }, this.blinkDuration)
+      }
+    }
   }
 
   isInsideEye(x: number, y: number): boolean {
@@ -59,7 +139,44 @@ class SingleEye {
     return false
   }
 
+  generateBlinkEye(): string {
+    const grid: string[][] = []
+    
+    for (let y = 0; y < this.height; y++) {
+      grid[y] = new Array(this.width).fill(' ')
+    }
+
+    // Draw closed eye as a horizontal line
+    const blinkY = this.eyeCenterY
+    for (let x = 5; x < this.width - 5; x++) {
+      const dx = x - this.eyeCenterX
+      const distance = Math.abs(dx)
+      
+      if (distance <= 18) {
+        if (distance <= 15) {
+          grid[blinkY][x] = '─'
+        } else {
+          grid[blinkY][x] = '╌'
+        }
+      }
+    }
+
+    // Add eyelash details
+    if (grid[blinkY] && grid[blinkY][this.eyeCenterX - 8]) {
+      grid[blinkY - 1] = grid[blinkY - 1] || new Array(this.width).fill(' ')
+      grid[blinkY - 1][this.eyeCenterX - 8] = '╱'
+      grid[blinkY - 1][this.eyeCenterX + 8] = '╲'
+    }
+
+    return grid.map(row => row.join('')).join('\n')
+  }
+
   generateEye(pupilOffsetX: number = 0, pupilOffsetY: number = 0): string {
+    // If blinking, return blink pattern
+    if (this.isBlinking) {
+      return this.generateBlinkEye()
+    }
+
     const grid: string[][] = []
     
     for (let y = 0; y < this.height; y++) {
@@ -153,12 +270,17 @@ class SingleEye {
   }
 
   update(mouseX: number, mouseY: number) {
-    if (!this.element) return
+    if (!this.element || this.state === EyeState.DEAD || this.state === EyeState.FADING) return
+    
+    // Update lifecycle state (handles blinking and fading)
+    this.updateLifecycle()
+    
     const offset = this.calculatePupilOffset(mouseX, mouseY)
     this.element.textContent = this.generateEye(offset.x, offset.y)
   }
 
   destroy() {
+    this.state = EyeState.DEAD
     if (this.element && this.element.parentNode) {
       this.element.parentNode.removeChild(this.element)
     }
@@ -169,9 +291,16 @@ class SingleEye {
 interface AsciiEyesProps {
   className?: string
   maxEyes?: number
+  startupDelay?: number // Delay before first eyes appear (in ms)
+  initialSpawnDelay?: number // Delay between initial eye spawns (in ms)
 }
 
-export default function AsciiEyes({ className = '', maxEyes = 15 }: AsciiEyesProps) {
+export default function AsciiEyes({ 
+  className = '', 
+  maxEyes = 15, 
+  startupDelay = 2000, 
+  initialSpawnDelay = 1500 
+}: AsciiEyesProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const eyesRef = useRef<SingleEye[]>([])
   const mousePositionRef = useRef({ x: 0, y: 0 })
@@ -218,51 +347,81 @@ export default function AsciiEyes({ className = '', maxEyes = 15 }: AsciiEyesPro
       { x: rect.width * (0.88 + Math.random() * 0.05), y: rect.height * (0.85 + Math.random() * 0.05) },    // Bottom right corner
     ]
 
-    // Add initial eyes at strategic positions
-    strategicPositions.forEach(pos => {
-      addEye(pos.x, pos.y)
-    })
-
     // Mouse move handler
     const handleMouseMove = (e: MouseEvent) => {
       mousePositionRef.current = { x: e.clientX, y: e.clientY }
       updateAllEyes()
     }
 
-    // Add event listener
+    // Add event listener immediately
     document.addEventListener('mousemove', handleMouseMove)
 
-    // Reduced random eye spawning focused tightly on corners
-    const spawnInterval = setInterval(() => {
-      if (Math.random() < 0.1 && eyesRef.current.length < maxEyes) {
-        const rect = container.getBoundingClientRect()
-        // Tight corner zones only
-        const cornerZones = [
-          { x: rect.width * (0.04 + Math.random() * 0.08), y: rect.height * (0.06 + Math.random() * 0.08) },     // Top left corner
-          { x: rect.width * (0.86 + Math.random() * 0.08), y: rect.height * (0.06 + Math.random() * 0.08) },     // Top right corner
-          { x: rect.width * (0.04 + Math.random() * 0.08), y: rect.height * (0.82 + Math.random() * 0.08) },     // Bottom left corner
-          { x: rect.width * (0.86 + Math.random() * 0.08), y: rect.height * (0.82 + Math.random() * 0.08) },     // Bottom right corner
-        ]
-        const randomZone = cornerZones[Math.floor(Math.random() * cornerZones.length)]
-        addEye(randomZone.x, randomZone.y)
-      }
-    }, 8000) // Less frequent spawning
+    // Update loop for smooth animation
+    const updateInterval = setInterval(() => {
+      updateAllEyes()
+    }, 50) // 20 FPS for smooth blinking animation
 
-    // Clean up excess eyes
-    const cleanupInterval = setInterval(() => {
-      if (eyesRef.current.length > maxEyes) {
-        const eyeToRemove = eyesRef.current.shift()
-        eyeToRemove?.destroy()
-      }
-    }, 2000)
+    let spawnInterval: NodeJS.Timeout
+    let initialSpawnTimeouts: NodeJS.Timeout[] = []
+
+    // Delayed startup: slowly spawn initial eyes
+    const startupTimeout = setTimeout(() => {
+      // Stagger the initial eyes with delays
+      strategicPositions.forEach((pos, index) => {
+        const spawnTimeout = setTimeout(() => {
+          addEye(pos.x, pos.y)
+        }, index * initialSpawnDelay)
+        initialSpawnTimeouts.push(spawnTimeout)
+      })
+
+      // Start continuous spawning after all initial eyes have appeared
+      const continuousSpawnDelay = strategicPositions.length * initialSpawnDelay + 2000
+      setTimeout(() => {
+        spawnInterval = setInterval(() => {
+          const aliveEyes = eyesRef.current.filter(eye => 
+            eye.state === EyeState.ALIVE || eye.state === EyeState.BLINKING || eye.state === EyeState.APPEARING
+          )
+          
+          // Spawn new eyes more frequently, but consider only alive eyes for the limit
+          if (Math.random() < 0.3 && aliveEyes.length < maxEyes) {
+            const rect = container.getBoundingClientRect()
+            // Expanded spawn areas including edges and some mid-areas
+            const spawnZones = [
+              // Corner zones (higher probability)
+              { x: rect.width * (0.04 + Math.random() * 0.08), y: rect.height * (0.06 + Math.random() * 0.08), weight: 3 },     // Top left corner
+              { x: rect.width * (0.86 + Math.random() * 0.08), y: rect.height * (0.06 + Math.random() * 0.08), weight: 3 },     // Top right corner
+              { x: rect.width * (0.04 + Math.random() * 0.08), y: rect.height * (0.82 + Math.random() * 0.08), weight: 3 },     // Bottom left corner
+              { x: rect.width * (0.86 + Math.random() * 0.08), y: rect.height * (0.82 + Math.random() * 0.08), weight: 3 },     // Bottom right corner
+              
+              // Edge zones (medium probability)
+              { x: rect.width * (0.15 + Math.random() * 0.7), y: rect.height * (0.05 + Math.random() * 0.05), weight: 2 },      // Top edge
+              { x: rect.width * (0.15 + Math.random() * 0.7), y: rect.height * (0.88 + Math.random() * 0.05), weight: 2 },      // Bottom edge
+              { x: rect.width * (0.05 + Math.random() * 0.05), y: rect.height * (0.15 + Math.random() * 0.7), weight: 2 },      // Left edge
+              { x: rect.width * (0.88 + Math.random() * 0.05), y: rect.height * (0.15 + Math.random() * 0.7), weight: 2 },      // Right edge
+              
+              // Occasional center spawns (lower probability)
+              { x: rect.width * (0.2 + Math.random() * 0.6), y: rect.height * (0.2 + Math.random() * 0.6), weight: 1 },         // Center area
+            ]
+            
+            // Weighted random selection
+            const weightedZones = spawnZones.flatMap(zone => Array(zone.weight).fill(zone))
+            const randomZone = weightedZones[Math.floor(Math.random() * weightedZones.length)]
+            addEye(randomZone.x, randomZone.y)
+          }
+        }, 3000) // More frequent spawning since eyes have their own lifecycle
+      }, continuousSpawnDelay)
+
+    }, startupDelay)
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove)
-      clearInterval(spawnInterval)
-      clearInterval(cleanupInterval)
+      clearTimeout(startupTimeout)
+      initialSpawnTimeouts.forEach(timeout => clearTimeout(timeout))
+      if (spawnInterval) clearInterval(spawnInterval)
+      clearInterval(updateInterval)
       removeAllEyes()
     }
-  }, [addEye, removeAllEyes, updateAllEyes, maxEyes])
+  }, [addEye, removeAllEyes, updateAllEyes, maxEyes, startupDelay, initialSpawnDelay])
 
   return (
     <div 
