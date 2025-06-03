@@ -8,6 +8,7 @@ import { GlitchOverlay } from "@/components/glitch-overlay"
 import { CRTFrontScreen } from "@/components/crt-front-screen"
 import { Work } from "@/components/Work"
 import { About } from "@/components/about"
+import { Blog } from "@/components/blog"
 
 export default function Home() {
     const [showFrontScreen, setShowFrontScreen] = useState(true)
@@ -53,6 +54,8 @@ export default function Home() {
                 return <Work />
             case "about":
                 return <About />
+            case "restless dreams":
+                return <Blog />
             case "contact":
                 return <Contact />
             default:

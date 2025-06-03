@@ -337,14 +337,17 @@ export default function AsciiEyes({
     if (!containerRef.current) return
 
     const container = containerRef.current
-    const rect = container.getBoundingClientRect()
     
-    // Define tight corner positions with minimal variation
+    // Use viewport dimensions instead of container rect for zoom independence
+    const viewportWidth = window.innerWidth
+    const viewportHeight = window.innerHeight
+    
+    // Define tight corner positions with minimal variation using viewport units
     const strategicPositions = [
-      { x: rect.width * (0.05 + Math.random() * 0.05), y: rect.height * (0.08 + Math.random() * 0.05) },    // Top left corner
-      { x: rect.width * (0.88 + Math.random() * 0.05), y: rect.height * (0.08 + Math.random() * 0.05) },    // Top right corner
-      { x: rect.width * (0.05 + Math.random() * 0.05), y: rect.height * (0.85 + Math.random() * 0.05) },    // Bottom left corner
-      { x: rect.width * (0.88 + Math.random() * 0.05), y: rect.height * (0.85 + Math.random() * 0.05) },    // Bottom right corner
+      { x: viewportWidth * 0.05, y: viewportHeight * 0.2 },    // Left side
+      { x: viewportWidth * 0.95, y: viewportHeight * 0.2 },    // Right side
+      { x: viewportWidth * 0.05, y: viewportHeight * 0.7 },    // Left side lower
+      { x: viewportWidth * 0.95, y: viewportHeight * 0.7 },    // Right side lower
     ]
 
     // Mouse move handler
@@ -355,6 +358,33 @@ export default function AsciiEyes({
 
     // Add event listener immediately
     document.addEventListener('mousemove', handleMouseMove)
+
+    // Add resize handler to recalculate positions on zoom/resize
+    const handleResize = () => {
+      // Remove existing eyes and respawn them with new positions
+      removeAllEyes()
+      
+      // Respawn eyes after a short delay
+      setTimeout(() => {
+        const newViewportWidth = window.innerWidth
+        const newViewportHeight = window.innerHeight
+        
+        const newPositions = [
+          { x: newViewportWidth * 0.05, y: newViewportHeight * 0.2 },
+          { x: newViewportWidth * 0.95, y: newViewportHeight * 0.2 },
+          { x: newViewportWidth * 0.05, y: newViewportHeight * 0.7 },
+          { x: newViewportWidth * 0.95, y: newViewportHeight * 0.7 },
+        ]
+        
+        newPositions.forEach((pos, index) => {
+          setTimeout(() => {
+            addEye(pos.x, pos.y)
+          }, index * 200)
+        })
+      }, 100)
+    }
+
+    window.addEventListener('resize', handleResize)
 
     // Update loop for smooth animation
     const updateInterval = setInterval(() => {
@@ -384,23 +414,15 @@ export default function AsciiEyes({
           
           // Spawn new eyes more frequently, but consider only alive eyes for the limit
           if (Math.random() < 0.3 && aliveEyes.length < maxEyes) {
-            const rect = container.getBoundingClientRect()
-            // Expanded spawn areas including edges and some mid-areas
+            // Use viewport dimensions for consistent positioning
             const spawnZones = [
-              // Corner zones (higher probability)
-              { x: rect.width * (0.04 + Math.random() * 0.08), y: rect.height * (0.06 + Math.random() * 0.08), weight: 3 },     // Top left corner
-              { x: rect.width * (0.86 + Math.random() * 0.08), y: rect.height * (0.06 + Math.random() * 0.08), weight: 3 },     // Top right corner
-              { x: rect.width * (0.04 + Math.random() * 0.08), y: rect.height * (0.82 + Math.random() * 0.08), weight: 3 },     // Bottom left corner
-              { x: rect.width * (0.86 + Math.random() * 0.08), y: rect.height * (0.82 + Math.random() * 0.08), weight: 3 },     // Bottom right corner
+              // Left side zones (higher probability)
+              { x: viewportWidth * (0.02 + Math.random() * 0.03), y: viewportHeight * (0.1 + Math.random() * 0.8), weight: 3 },     // Left edge
+              { x: viewportWidth * (0.05 + Math.random() * 0.03), y: viewportHeight * (0.1 + Math.random() * 0.8), weight: 2 },     // Left side
               
-              // Edge zones (medium probability)
-              { x: rect.width * (0.15 + Math.random() * 0.7), y: rect.height * (0.05 + Math.random() * 0.05), weight: 2 },      // Top edge
-              { x: rect.width * (0.15 + Math.random() * 0.7), y: rect.height * (0.88 + Math.random() * 0.05), weight: 2 },      // Bottom edge
-              { x: rect.width * (0.05 + Math.random() * 0.05), y: rect.height * (0.15 + Math.random() * 0.7), weight: 2 },      // Left edge
-              { x: rect.width * (0.88 + Math.random() * 0.05), y: rect.height * (0.15 + Math.random() * 0.7), weight: 2 },      // Right edge
-              
-              // Occasional center spawns (lower probability)
-              { x: rect.width * (0.2 + Math.random() * 0.6), y: rect.height * (0.2 + Math.random() * 0.6), weight: 1 },         // Center area
+              // Right side zones (higher probability)
+              { x: viewportWidth * (0.95 + Math.random() * 0.03), y: viewportHeight * (0.1 + Math.random() * 0.8), weight: 3 },     // Right edge
+              { x: viewportWidth * (0.92 + Math.random() * 0.03), y: viewportHeight * (0.1 + Math.random() * 0.8), weight: 2 },     // Right side
             ]
             
             // Weighted random selection
@@ -420,6 +442,7 @@ export default function AsciiEyes({
       if (spawnInterval) clearInterval(spawnInterval)
       clearInterval(updateInterval)
       removeAllEyes()
+      window.removeEventListener('resize', handleResize)
     }
   }, [addEye, removeAllEyes, updateAllEyes, maxEyes, startupDelay, initialSpawnDelay])
 
