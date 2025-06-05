@@ -83,9 +83,35 @@ export function Blog() {
     try {
       setLoading(true)
       
-      // This would be replaced with actual file reading in a real app
-      // For now, I'll simulate reading the files we know exist
-      const filenames = ['Day.md', 'midnight-code-sessions.md']
+      // First, fetch the list of files in the Blog notes directory
+      const directoryResponse = await fetch('/api/blog-files')
+        .catch(() => ({ ok: false })) // Fallback if API doesn't exist
+
+      // Get the filenames from the API if available, otherwise use fallbacks
+      let filenames: string[] = []
+      if (directoryResponse.ok) {
+        // If we have an API endpoint that returns the files
+        filenames = await directoryResponse.json()
+      } else {
+        // Try to load the blog directory directly
+        try {
+          const blogDirResponse = await fetch('/Blog notes/')
+          if (blogDirResponse.ok) {
+            const html = await blogDirResponse.text()
+            // Extract filenames from directory listing HTML (may work on some servers)
+            const fileMatches = html.match(/href="([^"]+\.md)"/g) || []
+            filenames = fileMatches.map(match => match.replace(/href="|"/g, ''))
+          }
+        } catch (error) {
+          console.warn('Failed to load blog directory, using fallback discovery')
+        }
+
+        // No fallback test files - we'll only load what we can discover through the API or directory listing
+        if (filenames.length === 0) {
+          console.warn('No files found in the Blog notes directory through API or directory listing')
+        }
+      }
+
       const loadedPosts: BlogPost[] = []
       
       for (const filename of filenames) {
@@ -125,6 +151,16 @@ export function Blog() {
       // Sort by date (newest first)
       loadedPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       setPosts(loadedPosts)
+
+      // Show error message if no posts were loaded
+      if (loadedPosts.length === 0) {
+        console.warn('No blog posts found in the Blog notes directory')
+        setTerminalHistory(prev => [
+          ...prev,
+          "Error: No readable blog posts found in the 'Blog notes' directory.",
+          "Check that markdown files exist and are properly formatted."
+        ])
+      }
       
     } catch (error) {
       console.error('Failed to load blog posts:', error)
