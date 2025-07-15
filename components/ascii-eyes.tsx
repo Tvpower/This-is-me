@@ -29,7 +29,7 @@ class SingleEye {
   state: EyeState = EyeState.APPEARING
   
   // Lifecycle timing
-  lifespan: number = 15000 + Math.random() * 10000 // 15-25 seconds
+  lifespan: number = 45000 + Math.random() * 30000 // 45-75 seconds
   birthTime: number = Date.now()
   
   // Blinking
@@ -297,7 +297,7 @@ interface AsciiEyesProps {
 
 export default function AsciiEyes({ 
   className = '', 
-  maxEyes = 15, 
+  maxEyes = 6, 
   startupDelay = 2000, 
   initialSpawnDelay = 1500 
 }: AsciiEyesProps) {
@@ -332,23 +332,80 @@ export default function AsciiEyes({
     eyesRef.current.forEach(eye => eye.update(mousePositionRef.current.x, mousePositionRef.current.y))
   }, [])
 
-  // Initialize eyes at strategic positions (avoiding empty areas)
-  useEffect(() => {
-    if (!containerRef.current) return
-
-    const container = containerRef.current
-    
-    // Use viewport dimensions instead of container rect for zoom independence
+  const getRandomEyePosition = useCallback(() => {
     const viewportWidth = window.innerWidth
     const viewportHeight = window.innerHeight
     
-    // Define tight corner positions with minimal variation using viewport units
-    const strategicPositions = [
-      { x: viewportWidth * 0.05, y: viewportHeight * 0.2 },    // Left side
-      { x: viewportWidth * 0.95, y: viewportHeight * 0.2 },    // Right side
-      { x: viewportWidth * 0.05, y: viewportHeight * 0.7 },    // Left side lower
-      { x: viewportWidth * 0.95, y: viewportHeight * 0.7 },    // Right side lower
-    ]
+    // Eye dimensions (from SingleEye class)
+    const eyeWidth = 50
+    const eyeHeight = 20
+    
+    // Calculate safe boundaries
+    const minX = 10
+    const maxX = viewportWidth - eyeWidth - 10
+    const minY = 10
+    const maxY = viewportHeight - eyeHeight - 10
+    
+    // Check collision with existing eyes
+    const checkCollision = (x: number, y: number) => {
+      const collisionDistance = 80 // Minimum distance between eye centers
+      return eyesRef.current.some(eye => {
+        const dx = x - eye.x
+        const dy = y - eye.y
+        const distance = Math.sqrt(dx * dx + dy * dy)
+        return distance < collisionDistance
+      })
+    }
+    
+    // Try to find a valid position (max 50 attempts to avoid infinite loop)
+    for (let attempt = 0; attempt < 50; attempt++) {
+      // Alternate between left and right sides for better distribution
+      const isLeftSide = attempt % 2 === 0 ? Math.random() < 0.5 : (attempt % 4 < 2)
+      
+      // Define spawn zones with safe boundaries
+      const leftZones = [
+        { x: Math.max(minX, viewportWidth * 0.05), y: Math.max(minY, viewportHeight * 0.1) },      // Top-left corner
+        { x: Math.max(minX, viewportWidth * 0.05), y: Math.min(maxY, viewportHeight * 0.9) },      // Bottom-left corner
+        { x: Math.max(minX, viewportWidth * 0.05), y: Math.max(minY, Math.min(maxY, viewportHeight * (0.3 + Math.random() * 0.4))) },  // Left side
+      ]
+      
+      const rightZones = [
+        { x: Math.min(maxX, viewportWidth * 0.95), y: Math.max(minY, viewportHeight * 0.1) },      // Top-right corner
+        { x: Math.min(maxX, viewportWidth * 0.95), y: Math.min(maxY, viewportHeight * 0.9) },      // Bottom-right corner
+        { x: Math.min(maxX, viewportWidth * 0.95), y: Math.max(minY, Math.min(maxY, viewportHeight * (0.3 + Math.random() * 0.4))) },  // Right side
+      ]
+      
+      // Choose from appropriate side
+      const zones = isLeftSide ? leftZones : rightZones
+      const randomZone = zones[Math.floor(Math.random() * zones.length)]
+      
+      // Add some randomness to the position (constrained to safe bounds)
+      const maxOffsetX = Math.min(50, (maxX - minX) * 0.1) // 10% of available space or 50px max
+      const maxOffsetY = Math.min(25, (maxY - minY) * 0.1) // 10% of available space or 25px max
+      
+      const randomOffsetX = (Math.random() - 0.5) * maxOffsetX
+      const randomOffsetY = (Math.random() - 0.5) * maxOffsetY
+      
+      // Final position with boundary clamping
+      const finalX = Math.max(minX, Math.min(maxX, randomZone.x + randomOffsetX))
+      const finalY = Math.max(minY, Math.min(maxY, randomZone.y + randomOffsetY))
+      
+      // Check if this position is collision-free
+      if (!checkCollision(finalX, finalY)) {
+        return { x: finalX, y: finalY }
+      }
+    }
+    
+    // If we can't find a collision-free position, return a fallback position
+    const fallbackX = Math.max(minX, Math.min(maxX, viewportWidth * (Math.random() < 0.5 ? 0.1 : 0.9)))
+    const fallbackY = Math.max(minY, Math.min(maxY, viewportHeight * (0.2 + Math.random() * 0.6)))
+    
+    return { x: fallbackX, y: fallbackY }
+  }, [])
+
+  // Initialize eyes at strategic positions
+  useEffect(() => {
+    if (!containerRef.current) return
 
     // Mouse move handler
     const handleMouseMove = (e: MouseEvent) => {
@@ -359,92 +416,29 @@ export default function AsciiEyes({
     // Add event listener immediately
     document.addEventListener('mousemove', handleMouseMove)
 
-    // Add resize handler to recalculate positions on zoom/resize
-    const handleResize = () => {
-      // Remove existing eyes and respawn them with new positions
-      removeAllEyes()
-      
-      // Respawn eyes after a short delay
-      setTimeout(() => {
-        const newViewportWidth = window.innerWidth
-        const newViewportHeight = window.innerHeight
-        
-        const newPositions = [
-          { x: newViewportWidth * 0.05, y: newViewportHeight * 0.2 },
-          { x: newViewportWidth * 0.95, y: newViewportHeight * 0.2 },
-          { x: newViewportWidth * 0.05, y: newViewportHeight * 0.7 },
-          { x: newViewportWidth * 0.95, y: newViewportHeight * 0.7 },
-        ]
-        
-        newPositions.forEach((pos, index) => {
-          setTimeout(() => {
-            addEye(pos.x, pos.y)
-          }, index * 200)
-        })
-      }, 100)
-    }
-
-    window.addEventListener('resize', handleResize)
-
     // Update loop for smooth animation
     const updateInterval = setInterval(() => {
       updateAllEyes()
     }, 50) // 20 FPS for smooth blinking animation
 
-    let spawnInterval: NodeJS.Timeout
-    let initialSpawnTimeouts: NodeJS.Timeout[] = []
-
-    // Delayed startup: slowly spawn initial eyes
+    // Delayed startup: spawn initial eyes
     const startupTimeout = setTimeout(() => {
-      // Stagger the initial eyes with delays
-      strategicPositions.forEach((pos, index) => {
-        const spawnTimeout = setTimeout(() => {
-          addEye(pos.x, pos.y)
-        }, index * initialSpawnDelay)
-        initialSpawnTimeouts.push(spawnTimeout)
-      })
-
-      // Start continuous spawning after all initial eyes have appeared
-      const continuousSpawnDelay = strategicPositions.length * initialSpawnDelay + 2000
-      setTimeout(() => {
-        spawnInterval = setInterval(() => {
-          const aliveEyes = eyesRef.current.filter(eye => 
-            eye.state === EyeState.ALIVE || eye.state === EyeState.BLINKING || eye.state === EyeState.APPEARING
-          )
-          
-          // Spawn new eyes more frequently, but consider only alive eyes for the limit
-          if (Math.random() < 0.3 && aliveEyes.length < maxEyes) {
-            // Use viewport dimensions for consistent positioning
-            const spawnZones = [
-              // Left side zones (higher probability)
-              { x: viewportWidth * (0.02 + Math.random() * 0.03), y: viewportHeight * (0.1 + Math.random() * 0.8), weight: 3 },     // Left edge
-              { x: viewportWidth * (0.05 + Math.random() * 0.03), y: viewportHeight * (0.1 + Math.random() * 0.8), weight: 2 },     // Left side
-              
-              // Right side zones (higher probability)
-              { x: viewportWidth * (0.95 + Math.random() * 0.03), y: viewportHeight * (0.1 + Math.random() * 0.8), weight: 3 },     // Right edge
-              { x: viewportWidth * (0.92 + Math.random() * 0.03), y: viewportHeight * (0.1 + Math.random() * 0.8), weight: 2 },     // Right side
-            ]
-            
-            // Weighted random selection
-            const weightedZones = spawnZones.flatMap(zone => Array(zone.weight).fill(zone))
-            const randomZone = weightedZones[Math.floor(Math.random() * weightedZones.length)]
-            addEye(randomZone.x, randomZone.y)
-          }
-        }, 3000) // More frequent spawning since eyes have their own lifecycle
-      }, continuousSpawnDelay)
-
+      // Spawn initial eyes with delays
+      for (let i = 0; i < maxEyes; i++) {
+        setTimeout(() => {
+          const position = getRandomEyePosition()
+          addEye(position.x, position.y)
+        }, i * initialSpawnDelay)
+      }
     }, startupDelay)
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove)
       clearTimeout(startupTimeout)
-      initialSpawnTimeouts.forEach(timeout => clearTimeout(timeout))
-      if (spawnInterval) clearInterval(spawnInterval)
       clearInterval(updateInterval)
       removeAllEyes()
-      window.removeEventListener('resize', handleResize)
     }
-  }, [addEye, removeAllEyes, updateAllEyes, maxEyes, startupDelay, initialSpawnDelay])
+  }, [addEye, removeAllEyes, updateAllEyes, maxEyes, startupDelay, initialSpawnDelay, getRandomEyePosition])
 
   return (
     <div 
