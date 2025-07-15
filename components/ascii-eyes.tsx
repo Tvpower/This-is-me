@@ -29,7 +29,7 @@ class SingleEye {
   state: EyeState = EyeState.APPEARING
   
   // Lifecycle timing
-  lifespan: number = 45000 + Math.random() * 30000 // 45-75 seconds
+  lifespan: number = 15000 + Math.random() * 10000 // 15-25 seconds
   birthTime: number = Date.now()
   
   // Blinking

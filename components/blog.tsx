@@ -91,7 +91,9 @@ export function Blog() {
       let filenames: string[] = []
       if (directoryResponse.ok) {
         // If we have an API endpoint that returns the files
-        filenames = await directoryResponse.json()
+        if ("json" in directoryResponse) {
+          filenames = await directoryResponse.json()
+        }
       } else {
         // Try to load the blog directory directly
         try {
