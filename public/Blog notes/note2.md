@@ -1,5 +1,5 @@
 ---
-title: "Day 2: Why I cant control my emotions, who is behind the thoughts"
+title: "Day 2: Who is behind the thoughts"
 date: "17-08-2025"
 updated: " 17-08-2025 | 11:59 PM"
 description: "I Fucking hate everything."
@@ -11,7 +11,7 @@ featured: true
 
 It's hard to worry about myself. Every day I wake up feeling "Oh yeah Ill do it different." "I'll be a better different person today"
 
-But some part of me is still trying to be a lazy fat ass. And tbh I think I need to blame myself more it might be the ADHD or something like that but yk...
+But some part of me is still trying to be a lazy. And tbh I think I need to blame myself more it might be the ADHD or something like that but yk...
 
 I also like to hate a lot. I hate how people see life as such a generic thing and people try to be like the others. 
 I hate trends and the repetitive things some industries make. I hate how they ruin shows I like by trying to juice every single peenny out of them.
