@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { GlitchText } from "@/components/glitch-text"
 import AsciiEyes from "@/components/ascii-eyes"
@@ -20,7 +21,7 @@ interface BlogPost {
 }
 
 export function Blog() {
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null)
+  const router = useRouter()
   const [selectedFileIndex, setSelectedFileIndex] = useState(0)
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
@@ -191,21 +192,38 @@ export function Blog() {
       const selectionStyle = isSelected ? 'bg-green-700/30 text-white' : ''
       const arrow = isSelected ? '→ ' : '  '
       
-      output.push(`<span class="${selectionStyle}">${arrow}${post.permissions} 1 user user ${post.fileSize.padStart(6)} ${post.date} <span class="${baseColor}">${post.filename}</span></span>`)
+      output.push(`<span class="${selectionStyle} cursor-pointer hover:bg-green-700/20" data-post-index="${index}">${arrow}${post.permissions} 1 user user ${post.fileSize.padStart(6)} ${post.date} <span class="${baseColor}">${post.filename}</span></span>`)
     })
     return output
+  }
+
+  // Handle click on file listing
+  const handleFileClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement
+    const span = target.closest('[data-post-index]') as HTMLElement
+    if (span) {
+      const index = parseInt(span.dataset.postIndex || '0', 10)
+      if (!isNaN(index) && posts[index]) {
+        const selectedPostData = posts[index]
+        
+        // Add terminal output for opening file
+        setTerminalHistory(prev => [
+          ...prev,
+          "",
+          `user@dreams:~$ cat ${selectedPostData.filename}`,
+          `Opening ${selectedPostData.filename}...`,
+          ""
+        ])
+        
+        // Navigate to the blog post page
+        router.push(`/blog/${selectedPostData.slug}`)
+      }
+    }
   }
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (selectedPost) {
-        if (e.key === "Escape") {
-          setSelectedPost(null)
-        }
-        return
-      }
-
       if (posts.length === 0) return
 
       if (e.key === "ArrowUp") {
@@ -217,7 +235,6 @@ export function Blog() {
       } else if (e.key === "Enter") {
         e.preventDefault()
         const selectedPostData = posts[selectedFileIndex]
-        setSelectedPost(selectedPostData)
         
         // Add terminal output for opening file
         setTerminalHistory(prev => [
@@ -227,12 +244,15 @@ export function Blog() {
           `Opening ${selectedPostData.filename}...`,
           ""
         ])
+        
+        // Navigate to the blog post page
+        router.push(`/blog/${selectedPostData.slug}`)
       }
     }
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [selectedFileIndex, selectedPost, posts])
+  }, [selectedFileIndex, posts, router])
 
   // Load posts on mount
   useEffect(() => {
@@ -349,60 +369,6 @@ export function Blog() {
     return () => clearTimeout(timer)
   }, [])
 
-  if (selectedPost) {
-    return (
-      <div className="h-full overflow-y-auto bg-black text-white font-mono relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-green-900/5 to-transparent pointer-events-none"></div>
-        <div className="max-w-4xl mx-auto p-6 relative z-10">
-          <div className="mb-6 flex items-center justify-between">
-            <div className="text-green-400">
-              <span className="text-gray-400">user@dreams:</span>
-              <span className="text-white">~$ cat {selectedPost.filename}</span>
-            </div>
-            <button 
-              onClick={() => setSelectedPost(null)}
-              className="text-red-400 hover:text-red-300 text-sm"
-            >
-              [ESC] Close
-            </button>
-          </div>
-          
-          <div className="bg-gray-900/50 border border-green-700/30 p-6 rounded">
-            <div className="mb-4 text-green-300">
-              <div>File: {selectedPost.filename}</div>
-              <div>Size: {selectedPost.fileSize}</div>
-              <div>Modified: {selectedPost.updated}</div>
-              <div>Permissions: {selectedPost.permissions}</div>
-            </div>
-            
-            <div className="border-t border-green-700/30 pt-4 mt-4">
-              <h1 className="text-2xl text-green-400 mb-4">
-                <GlitchText 
-                  text={selectedPost.title} 
-                  isActive={glitchActive}
-                  intensity="medium"
-                />
-              </h1>
-              <div className="text-gray-300 leading-relaxed">
-                {selectedPost.description}
-              </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {selectedPost.tags.map((tag, index) => (
-                  <span key={index} className="text-green-500 text-sm">
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-6 text-gray-300 whitespace-pre-wrap">
-                {selectedPost.content.split('---').slice(2).join('---').trim()}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className={cn(
       "h-full bg-black text-white font-mono relative overflow-hidden",
@@ -437,6 +403,7 @@ export function Blog() {
           ref={terminalRef}
           className="flex-1 overflow-y-auto bg-black/50 border border-green-700/30 p-4 rounded mb-4"
           style={{ maxHeight: 'calc(100vh - 300px)' }}
+          onClick={handleFileClick}
         >
           {terminalHistory.map((line, index) => (
             <div 
