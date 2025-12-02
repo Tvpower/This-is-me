@@ -27,7 +27,8 @@ To be basic:
 
 **Why is FP8 important**  
 		  
-![image1](/Blog%20notes/images/image1.png)  
+![image1](/Blog%20notes/images/image5.png)  
+(this image is generated with nano banana)
 
 **NVFP4** Nvidia’s new baby format for Blackwell B200 GPUs. It doubles throughput and halves memory usage compared to FP8. It also requires specific hardware and complex quantization recipes to maintain accuracy.
 
@@ -70,6 +71,7 @@ In the paper not the whole experiment is done in NVFP4 at the end there is a tra
 
 Here is also a more in depth detail of the process:
 
+![image1](/Blog%20notes/images/image1.png)  
 (image from [https://arxiv.org/html/2509.25149v1](https://arxiv.org/html/2509.25149v1) )
 
 The diagram explains how things are broken into multiple transformation steps where different data points are used to create a final DGRAD(NVFP4 GEMM)
