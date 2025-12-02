@@ -28,7 +28,6 @@ To be basic:
 **Why is FP8 important**  
 		  
 ![image1](/Blog%20notes/images/image1.png)  
-(this image is generated with nano banana)
 
 **NVFP4** Nvidia’s new baby format for Blackwell B200 GPUs. It doubles throughput and halves memory usage compared to FP8. It also requires specific hardware and complex quantization recipes to maintain accuracy.
 
