@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Retro Terminal Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #001100;
+            color: #00ff66;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            text-shadow: 0 0 4px #00ff66;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Outer terminal frame */
+        .terminal-frame {
+            width: 1000px;
+            height: 600px;
+            border: 2px solid #00ff66;
+            padding: 15px;
+            background: #000800;
+            clip-path: polygon(
+                    0 0, 98% 0, 100% 4%, 100% 100%, 0 100%
+            );
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Tabs row */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .tabs div {
+            padding: 4px 10px;
+            border: 1px solid #00ff66;
+        }
+
+        .tabs .active {
+            background: #003300;
+        }
+
+        /* Main layout */
+        .main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+        }
+
+        /* Chat window */
+        .chat {
+            border: 1px solid #00ff66;
+            padding: 10px;
+            background: #000;
+            clip-path: polygon(
+                    0 0, 96% 0, 100% 6%, 100% 100%, 0 100%
+            );
+        }
+
+        /* Profile panel */
+        .profile {
+            border: 1px solid #00ff66;
+            padding: 10px;
+            background: #000;
+            clip-path: polygon(
+                    0 0, 96% 0, 100% 6%, 100% 100%, 0 100%
+            );
+        }
+
+        .profile img {
+            width: 100%;
+            border: 1px solid #00ff66;
+            margin-bottom: 10px;
+        }
+
+        /* Input at bottom */
+        .input-area {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-area input {
+            flex: 1;
+            background: #000;
+            border: 1px solid #00ff66;
+            color: #00ff66;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            padding: 5px;
+        }
+
+        .input-area button {
+            background: #001100;
+            border: 1px solid #00ff66;
+            color: #00ff66;
+            font-family: 'VT323', monospace;
+            cursor: pointer;
+            padding: 5px 12px;
+        }
+
+        .input-area button:hover {
+            background: #003300;
+        }
+
+        /* Footer text */
+        .footer {
+            font-size: 14px;
+            margin-top: 4px;
+            text-align: left;
+            color: #00ff66;
+        }
+    </style>
+</head>
+<body>
+<div class="terminal-frame">
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="active">CHAT</div>
+        <div>CONTACTS</div>
+        <div>LOC</div>
+        <div>DOCUMENTS</div>
+        <div>ORDERS</div>
+        <div>RECORDINGS</div>
+        <div>MAP</div>
+    </div>
+
+    <!-- Main split -->
+    <div class="main">
+        <!-- Chat -->
+        <div class="chat">
+            <p><b>J. O'NEIL:</b> WHAT THE FUCK DID I DO??</p>
+            <p><b>YOU:</b> A LIFE, JIMMY, YOU KNOW WHAT THAT IS? IT'S THE SHIT THAT HAPPENS WHILE YOU'RE WAITING FOR MOMENTS THAT NEVER COME.</p>
+            <p><b>J. O'NEIL:</b> THAT'S SOME SPIDERMAN SHIT RIGHT THERE!!</p>
+            <p><b>YOU:</b> FUNNY THING IS THEY WERE ALL DEAD SERIOUS.</p>
+        </div>
+
+        <!-- Profile -->
+        <div class="profile">
+            <img src="your-photo.jpg" alt="Profile">
+            <p><b>OFFICER:</b> A-34-0.1</p>
+            <p><b>LEGAL NAME:</b> JIM O’NEIL</p>
+            <p><b>SECURITY CODE:</b> 48532695-CF</p>
+            <p><b>PERSONAL WEAPON:</b> COLT M1911A1</p>
+            <p style="font-size: 14px;">
+                O’Neil was born to Irish-American parents in the Lauraville neighborhood of Baltimore, Maryland. His father worked as a steelworker...
+            </p>
+        </div>
+    </div>
+
+    <!-- Input -->
+    <div class="input-area">
+        <input type="text" placeholder="DON’T THINK TOO MUCH ABOUT IT">
+        <button>SEND</button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">LOW SIGNAL</div>
+</div>
+</body>
+</html>

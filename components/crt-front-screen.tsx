@@ -17,7 +17,7 @@ export function CRTFrontScreen({ onMenuSelect, fullscreen = false }: CRTFrontScr
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const tvRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
-  const menuOptions = ["ME", "STACK", "ABOUT", "RESTLESS DREAMS", "CONTACT"]
+  const menuOptions = ["ME", "ABOUT", "RESTLESS DREAMS", "TICK-TOCK", "CONTACT"]
   const animationRef = useRef<number | null>(null)
 
   // Generate CRT noise

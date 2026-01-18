@@ -9,6 +9,7 @@ import { CRTFrontScreen } from "@/components/crt-front-screen"
 import { Work } from "@/components/Work"
 import { About } from "@/components/about"
 import { Blog } from "@/components/blog"
+import { TickTock } from "@/components/Tick-tock";
 
 export default function Home() {
     const [showFrontScreen, setShowFrontScreen] = useState(true)
@@ -50,12 +51,12 @@ export default function Home() {
         switch (activeSection) {
             case "me":
                 return <Hero />
-            case "stack":
-                return <Work />
             case "about":
                 return <About />
             case "restless dreams":
                 return <Blog />
+            case "tick-tock":
+                return <TickTock />
             case "contact":
                 return <Contact />
             default:
