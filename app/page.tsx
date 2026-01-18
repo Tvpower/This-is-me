@@ -2,11 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { Hero } from "@/components/hero"
-import { Skills } from "@/components/skills"
 import { Contact } from "@/components/contact"
 import { GlitchOverlay } from "@/components/glitch-overlay"
 import { CRTFrontScreen } from "@/components/crt-front-screen"
-import { Work } from "@/components/Work"
 import { About } from "@/components/about"
 import { Blog } from "@/components/blog"
 import { TickTock } from "@/components/Tick-tock";
@@ -69,7 +67,7 @@ export default function Home() {
             <GlitchOverlay />
             <div className="relative z-20 h-screen w-full">
                 {/* Full CRT TV container */}
-                <div className="relative w-full h-full overflow-hidden border-4 border-gray-800 rounded-lg">
+                <div className="relative w-full h-full overflow-hidden">
                     {showFrontScreen ? (
                         <CRTFrontScreen onMenuSelect={handleMenuSelect} fullscreen={true} />
                     ) : (
