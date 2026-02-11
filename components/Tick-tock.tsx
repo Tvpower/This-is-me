@@ -208,7 +208,9 @@ export function TickTock() {
                         }}
                         onClick={(e) => {
                             e.stopPropagation()
-                            removeFlower(flower.id)
+                            if(isAuthenticated) {
+                                removeFlower(flower.id)
+                            }
                         }}
                     >
                         <Image
