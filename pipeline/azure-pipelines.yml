@@ -1,0 +1,51 @@
+trigger:
+  - main # Runs whenever code is pushed to main
+pool:
+  name: 'Default'
+
+parameters:
+  - name: buildConfiguration
+    displayName: Build Config
+    type: string
+    default: release
+    values:
+      - release
+      - debug
+
+variables:
+  - name: DB_URL
+    value: 'mysql://$(DB_USER):$(DB_PASSWORD)@host.docker.internal:3306/$(DB_NAME)'
+  - name: frontEndImage
+    value: 'frontend-app'
+  - name: backendImage
+    value: 'backend-app'
+
+stages:
+  -stage: Build
+  displayName: Build and Pust Stage
+  jobs:
+    # First job is to build BE and link it with DB
+    - job: BuildBackend
+      displayName: Build Backend Image
+      inputs:
+        command: build
+        repository: $(backendImageName)
+        dockerfile: 'backend/Dockerfile'
+        tags: |
+          latest
+          $(Build.BuildId)
+        # Azure injects our secrets here and will mask them if any log is outputted
+        arguments: '--build-arg DB_URL=$(DB_URL)'
+    - job: BuildFrontEnd
+      displayName: Build Next.js FE
+      steps:
+        - task: Docker@2
+          displayName: Build FE image
+          inputs:
+            command: build
+            repository: $(frontendImageName)
+            dockerfile: 'frontend/Dockerfile'
+            tags: |
+              latest
+              $(Build.BuildId)
+      
