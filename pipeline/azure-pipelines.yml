@@ -13,39 +13,40 @@ parameters:
       - debug
 
 variables:
-  - name: DB_URL
-    value: 'mysql://$(DB_USER):$(DB_PASSWORD)@host.docker.internal:3306/$(DB_NAME)'
-  - name: frontEndImage
-    value: 'frontend-app'
-  - name: backendImage
-    value: 'backend-app'
+  DB_URL: 'mysql://$(DB_USER):$(DB_PASSWORD)@host.docker.internal:3306/$(DB_NAME)'
+  frontendImageName: 'frontend-app'
+  backendImageName: 'backend-app'
 
 stages:
-  -stage: Build
-  displayName: Build and Pust Stage
-  jobs:
-    # First job is to build BE and link it with DB
-    - job: BuildBackend
-      displayName: Build Backend Image
-      inputs:
-        command: build
-        repository: $(backendImageName)
-        dockerfile: 'backend/Dockerfile'
-        tags: |
-          latest
-          $(Build.BuildId)
-        # Azure injects our secrets here and will mask them if any log is outputted
-        arguments: '--build-arg DB_URL=$(DB_URL)'
-    - job: BuildFrontEnd
-      displayName: Build Next.js FE
-      steps:
-        - task: Docker@2
-          displayName: Build FE image
-          inputs:
-            command: build
-            repository: $(frontendImageName)
-            dockerfile: 'frontend/Dockerfile'
-            tags: |
-              latest
-              $(Build.BuildId)
-      
+  - stage: Build
+    displayName: Build and Push Stage
+    jobs:
+        # JOB 1: BACKEND
+      - job: BuildBackend
+        displayName: Build Backend Image
+        steps:
+          # FIXED: Added the missing 'task' block
+          - task: Docker@2
+            displayName: Build Backend
+            inputs:
+              command: build
+              repository: $(backendImageName)
+              dockerfile: 'backend/Dockerfile'
+              tags: |
+                latest
+                $(Build.BuildId)
+              arguments: '--build-arg DATABASE_URL=$(DB_URL)'
+
+      - job: BuildFrontEnd
+        displayName: Build Next.js FE
+        steps:
+          - task: Docker@2
+            displayName: Build FE image
+            inputs:
+              command: build
+              repository: $(frontendImageName)
+              dockerfile: 'frontend/Dockerfile'
+              tags: |
+                latest
+                $(Build.BuildId)
+        
