@@ -14,11 +14,15 @@ WORKDIR /app/HeckerProject
 # manifest info
 COPY Cargo.toml Cargo.lock ./
 
-# Define the arg for the database URL
-ARG DATABASE_URL
+# ARG is for build-time parameters choosing a base image tag, toggling
+# Using it in this scenario bakes it into the image layer and this exposes it
+# ARG DATABASE_URL
 
 # Needs to be as an environmental variable so cargo/sqlx can see it
-ENV DATABASE_URL=$DATABASE_URL
+
+#ENV DATABASE_URL=$DATABASE_URL
+#This permanently embed the connection string(with credentials) into every layer after it. It also busts the Docker
+# on every build if the value changes
 
 # Build
 RUN cargo build --release
