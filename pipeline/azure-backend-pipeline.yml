@@ -20,7 +20,7 @@ parameters:
       - debug
 
 variables:
-  frontendImageName: 'backend-app'
+  backendImageName: 'backend-app'
 
 stages:
   - stage: Build
