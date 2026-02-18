@@ -22,7 +22,7 @@ async fn rocket() -> Rocket<Build> {
         .expect("Failed to create database pool");
 
     // Configure CORS for FE
-    let cors = CorsOptions::default()
+    let cors = CorsOptions::default() //This might need to be removed in a future update bc im using nginx now
         .allowed_origins(AllowedOrigins::all())
         .allowed_methods(
             vec!["Get", "Post", "Put", "Delete", "Options"]

@@ -15,7 +15,7 @@ interface Flower {
     hours: number
 }
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000/api"
+const API_URL = process.env.REACT_APP_API_URL || "/api"
 
 export function TickTock() {
     const [eyePosition, setEyePosition] = useState({ x: "15%", y: "15%" })
