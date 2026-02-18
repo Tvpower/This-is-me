@@ -19,7 +19,7 @@ services:
       - ./backend/DB/backup.sql:/docker-entrypoint-initdb.d/init.sql
       # This is used so the data stays persistent even if the container is deleted
       - mysql_data:/var/lib/mysql
-    healthcheck:
+    healthcheck: # given that it takes some time to start up we need to add a healthcheck for the BE to run
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
       interval: 5s
       timeout: 5s
@@ -37,7 +37,6 @@ services:
       - frontend
       - backend
 
-
   # ============ BACKEND ============
   backend:
     image: backend-app:latest #DONT USE LATEST
@@ -47,7 +46,6 @@ services:
     environment:
       - DATABASE_URL=mysql://${DB_USER}:${DB_PASSWORD}@mysql-server:3306/${DB_NAME}
       - ROCKET_ADDRESS=0.0.0.0
-
 
 #    ports:
 #      - "8000:8000"
