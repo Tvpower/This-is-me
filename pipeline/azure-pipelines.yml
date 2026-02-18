@@ -53,5 +53,13 @@ stages:
   # We must delete the container then run and build and run the new version
   # Add nginx
   - stage: Deployment
-
-
+    displayName: Deploy Stage
+    dependsOn: Build
+    jobs:
+      - job: Deploy
+        displayName: Deploy with Docker Compose
+        steps:
+          - script: |
+              docker compose down
+              docker compose up -d
+            displayName: Restart containers
