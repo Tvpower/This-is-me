@@ -63,3 +63,8 @@ stages:
               docker compose down
               docker compose up -d
             displayName: Restart containers
+            env:
+              DB_NAME: $(DB_NAME)
+              DB_USER: $(DB_USER)
+              DB_PASSWORD: $(DB_PASSWORD)
+              DB_ROOT_PASSWORD: $(DB_ROOT_PASSWORD)
