@@ -16,7 +16,6 @@ parameters:
       - debug
 
 variables:
-  DB_URL: 'mysql://$(DB_USER):$(DB_PASSWORD)@host.docker.internal:3306/$(DB_NAME)' #this line exposes my dbuser and dbpassword
   frontendImageName: 'frontend-app'
   backendImageName: 'backend-app'
 
@@ -35,7 +34,6 @@ stages:
               dockerfile: 'backend/Dockerfile'
               tags:
 
-              arguments: '--build-arg DATABASE_URL=$(DB_URL)'
 
       - job: BuildFrontEnd
         displayName: Build Next.js FE
