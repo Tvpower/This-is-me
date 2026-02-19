@@ -55,7 +55,7 @@ services:
 
   # ============ FRONTEND ============
   frontend:
-    image: frontend-app:6
+    image: frontend-app:${FRONTEND_TAG:-6}
 #    ports:
 #      - "3000:3000"    Need to see if this works without it
 

@@ -45,6 +45,9 @@ stages:
       steps:
       - script: |
           # Only targets the frontend service so the backend stays online
-          docker compose up -d --no-deps --build frontend:$(Build.BuildId)
+          docker compose up -d --build frontend:$(Build.BuildId)
         displayName: 'Restart Frontend Container'
+        env:
+          FRONTEND_TAG: $(Build.BuildId)
+
 

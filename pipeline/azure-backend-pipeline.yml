@@ -45,8 +45,8 @@ stages:
         steps:
           - script: |
               # Only targets the backend service so the frontend stays online
-              docker compose up -d --no-deps --build backend:$(Build.BuildId)
-            displayName: Restart Backend container
+              docker compose up -d --build backend:$(Build.BuildId)
+            displayName: 'Restart Backend container'
             env:
               DB_NAME: $(DB_NAME)
               DB_USER: $(DB_USER)
