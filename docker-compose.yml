@@ -39,7 +39,7 @@ services:
 
   # ============ BACKEND ============
   backend:
-    image: backend-app:latest #DONT USE LATEST
+    image: backend-app:${BACKEND_TAG:-6} #DONT USE LATEST
     depends_on:
       db:
         condition: service_healthy
@@ -55,11 +55,12 @@ services:
 
   # ============ FRONTEND ============
   frontend:
-    image: frontend-app:latest
+    image: frontend-app:6
 #    ports:
 #      - "3000:3000"    Need to see if this works without it
 
 
+# Docker compose should be on the root folder of the machine to avoid moving .env files and being easier to manage
   # Add the DB volume here
   # Make a backup of my DB then add it as a volume here
 volumes:
