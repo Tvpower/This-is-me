@@ -35,7 +35,6 @@ stages:
               command: build
               repository: $(backendImageName)
               dockerfile: 'backend/Dockerfile'
-              tags: 'latest'
 
   - stage: Deployment
     displayName: Deploy stage
@@ -46,7 +45,7 @@ stages:
         steps:
           - script: |
               # Only targets the backend service so the frontend stays online
-              docker compose up -d --no-deps --build backend
+              docker compose up -d --no-deps --build backend:$(Build.BuildId)
             displayName: Restart Backend container
             env:
               DB_NAME: $(DB_NAME)
