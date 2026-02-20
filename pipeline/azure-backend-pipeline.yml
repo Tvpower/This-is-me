@@ -45,8 +45,8 @@ stages:
         displayName: Deploy Backend
         steps:
           - script: |
-              # Only targets the backend service so the frontend stays online
-              docker compose up -d --build backend
+              docker compose pull backend
+              docker compose up -d backend
             displayName: 'Restart Backend container'
             env:
               DB_NAME: $(DB_NAME)

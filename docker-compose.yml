@@ -39,7 +39,7 @@ services:
 
   # ============ BACKEND ============
   backend:
-    image: backend-app:${BACKEND_TAG:-6} #DONT USE LATEST
+    image: tvpow3r/backend-app:${BACKEND_TAG:-6}
     depends_on:
       db:
         condition: service_healthy
@@ -55,7 +55,7 @@ services:
 
   # ============ FRONTEND ============
   frontend:
-    image: frontend-app:${FRONTEND_TAG:-6}
+    image: tvpow3r/frontend-app:${BACKEND_TAG:-6}
 #    ports:
 #      - "3000:3000"    Need to see if this works without it
 

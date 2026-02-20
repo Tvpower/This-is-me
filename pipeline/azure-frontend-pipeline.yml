@@ -45,9 +45,9 @@ stages:
       displayName: Deploy FE
       steps:
       - script: |
-          # Only targets the frontend service so the backend stays online
-          docker compose up -d --build frontend
-        displayName: 'Restart Frontend Container'
+          docker compose pull frontend
+          docker compose up -d frontend
+        displayName: 'Restart frontend container'
         env:
           FRONTEND_TAG: $(Build.BuildId)
 
