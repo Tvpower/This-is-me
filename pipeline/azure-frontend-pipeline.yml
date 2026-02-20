@@ -20,7 +20,7 @@ parameters:
       - debug
 
 variables:
-  frontendImageName: 'frontend-app'
+  frontendImageName: 'tvpow3r/frontend-app'
 
 stages:
   - stage: Build
@@ -32,7 +32,8 @@ stages:
           - task: Docker@2
             displayName: Build and push an image to container registry
             inputs:
-              command: build
+              command: buildAndPush
+              containerRegistry: 'DockerHub-Tvpow3r'
               repository: $(frontendImageName)
               dockerfile: 'frontend/Dockerfile'
 

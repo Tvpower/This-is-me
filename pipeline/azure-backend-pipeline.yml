@@ -20,7 +20,7 @@ parameters:
       - debug
 
 variables:
-  backendImageName: 'backend-app'
+  backendImageName: 'tvpow3r/backend-app'
 
 stages:
   - stage: Build
@@ -32,7 +32,8 @@ stages:
           - task: Docker@2
             displayName: Build Backend
             inputs:
-              command: build
+              command: buildAndPush
+              containerRegistry: 'DockerHub-Tvpow3r'
               repository: $(backendImageName)
               dockerfile: 'backend/Dockerfile'
 
