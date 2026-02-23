@@ -37,6 +37,13 @@ services:
       - frontend
       - backend
 
+      # En el concepto de deployment de kubernetes hay 2 conceptos de volume:
+      #Volume is what ; volumeMount is where
+      #ConfigMap
+      #NameSpace:
+      #Secrets: service to save env variables
+      #after this we start with helm
+
   # ============ BACKEND ============
   backend:
     image: tvpow3r/backend-app:${BACKEND_TAG:-6}
