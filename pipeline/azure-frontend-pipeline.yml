@@ -48,6 +48,7 @@ stages:
               helm upgrade --install this-is-me ./this-is-me \
               --namespace this-is-me \
               --reuse-values \
+              --create-namespace \
               --set frontend.DockerImage=tvpow3r/frontend-app:$(Build.BuildId)
             displayName: Deploy with Helm
             env:

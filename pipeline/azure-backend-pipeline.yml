@@ -47,6 +47,7 @@ stages:
           - script: |
               helm upgrade --install this-is-me ./this-is-me \
               --namespace this-is-me \
+              --create-namespace \
               --reuse-values \
               --set backend.DockerImage=tvpow3r/backend-app:$(Build.BuildId)
             displayName: Deploy with Helm
