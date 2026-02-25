@@ -1,20 +1,29 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1 # Deployment service have built-in controllers that constantly monitor the state of the application
+kind: Deployment
 metadata:
   name: backend-pod
   namespace: {{.Values.namespace}}
   labels:
     app: backend-pod
 spec:
-  containers:
-    - name: backend-container
-      image: tvpow3r/backend-app:44
-      imagePullPolicy: Always
-      ports:
-        - containerPort: 8000
-      envFrom:
-        - secretRef:
-            name: backend-secrets
+  replicas: 1 # This is telling kubernetes how many pods must be running
+  selector:
+    matchLabels:
+      app: backend-pod
+  template:
+    metadata:
+      labels:
+        app: backend-pod
+    spec:
+      containers:
+        - name: backend-container
+          image: {{.Values.backend.DockerImage}}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: backend-secrets
 
 ---
 apiVersion: v1
@@ -29,3 +38,11 @@ spec:
   ports:
     - port: 8000
       targetPort: 8000
+
+
+#when doing update what is the the --reuse-values flag
+#In the CD pipeline we need to replace so it uses kubernetes, and it deploys through helm
+#---
+#Research task:
+# Ansible
+

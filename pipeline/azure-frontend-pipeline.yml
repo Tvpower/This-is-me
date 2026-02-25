@@ -4,8 +4,8 @@ trigger:
     - main
   paths:
     include:
-    - frontend/* # This is what makes so it triggers only when the frontend changes
-    - docker-compose.yml # Triggers if the compose config changes
+    - frontend/*
+    - this-is-me/*
 
 pool:
   name: 'Default'
@@ -38,17 +38,20 @@ stages:
               dockerfile: 'frontend/Dockerfile'
 
   - stage: Deployment
-    displayName: Deploy stage
+    displayName: Deploy Stage
     dependsOn: Build
     jobs:
-    - job: Deploy
-      displayName: Deploy FE
-      steps:
-      - script: |
-          docker compose pull frontend
-          docker compose up -d frontend
-        displayName: 'Restart frontend container'
-        env:
-          FRONTEND_TAG: $(Build.BuildId)
+      - job: Deploy
+        displayName: Deploy with Helm
+        steps:
+          - script: |
+              helm upgrade --install this-is-me ./this-is-me \
+              --namespace this-is-me \
+              --create-namespace \
+              --reuse-values \
+              --set frontend.DockerImage=tvpow3r/frontend-app:$(Build.BuildId)
+            displayName: Deploy with Helm
+            env:
+              KUBECONFIG: /Users/tvpower/.kube/config
 
 

@@ -2,10 +2,15 @@ namespace: this-is-me
 
 frontend:
   serviceType: ClusterIP
+  DockerImage: tvpow3r/frontend-app:52
 
 backend:
   serviceType: ClusterIP
+  DockerImage: tvpow3r/backend-app:57
 
 nginx:
   serviceType: NodePort
   nodePort: 30083
+
+#Next time add a secrets.yaml file for env keys
+#For developers as a DevOps you always want to give different users and certifications for developers
