@@ -1,17 +1,26 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: frontend-pod
   namespace: {{.Values.namespace}}
   labels:
     app: frontend-pod
 spec:
-  containers:
-    - name: frontend
-      image: tvpow3r/frontend-app:52
-      imagePullPolicy: Always
-      ports:
-        - containerPort: 3000
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-pod
+  template:
+    metadata:
+      labels:
+        app: frontend-pod
+    spec:
+      containers:
+        - name: frontend-container
+          image: {{.Values.frontend.DockerImage}}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
