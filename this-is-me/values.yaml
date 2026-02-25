@@ -1,0 +1,11 @@
+namespace: this-is-me
+
+frontend:
+  serviceType: ClusterIP
+
+backend:
+  serviceType: ClusterIP
+
+nginx:
+  serviceType: NodePort
+  nodePort: 30083

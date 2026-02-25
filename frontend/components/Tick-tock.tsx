@@ -15,6 +15,8 @@ interface Flower {
     hours: number
 }
 
+const API_URL = process.env.REACT_APP_API_URL || "/api"
+
 export function TickTock() {
     const [eyePosition, setEyePosition] = useState({ x: "15%", y: "15%" })
     const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -53,20 +55,22 @@ export function TickTock() {
         return () => clearInterval(interval)
     }, [])
 
-    // Load flowers from localStorage on mount
+    //Load flowers from backend on mount
     useEffect(() => {
-        const savedFlowers = localStorage.getItem("flowers")
-        if (savedFlowers) {
-            setFlowers(JSON.parse(savedFlowers))
-        }
-    }, [])
+        fetchFlowers()
+    }, []);
 
-    // Save flowers to localStorage whenever they change
-    useEffect(() => {
-        if (flowers.length > 0) {
-            localStorage.setItem("flowers", JSON.stringify(flowers))
+    const fetchFlowers = async () => {
+        try {
+            const response = await fetch(`${API_URL}/flowers`)
+            if (response.ok) {
+                const data = await response.json()
+                setFlowers(data)
+            }
+        } catch (error) {
+            console.error("Failed to fetch flowers", error)
         }
-    }, [flowers])
+    }
 
     const handleEyeClick = () => {
         setIsMenuOpen(true)
@@ -81,14 +85,14 @@ export function TickTock() {
         }
     }
 
-    const handleLandClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleLandClick = async (e: React.MouseEvent<HTMLDivElement>) => {
         if (!isAuthenticated || !flowerName || !flowerHours) return
 
         const rect = e.currentTarget.getBoundingClientRect()
-        const x = ((e.clientX - rect.left) / rect.width) * 100
+        const x = ((e.clientX - rect.left ) / rect.width) * 100
         const y = ((e.clientY - rect.top) / rect.height) * 100
 
-        const newFlower: Flower = {
+        const newFlower = {
             id: Date.now().toString(),
             x,
             y,
@@ -96,13 +100,34 @@ export function TickTock() {
             hours: parseFloat(flowerHours)
         }
 
-        setFlowers([...flowers, newFlower])
-        setFlowerName("")
-        setFlowerHours("")
+        try {
+            const response = await fetch(`${API_URL}/flowers`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(newFlower),
+            })
+
+            if (response.ok) {
+                await fetchFlowers() //Refresh list from backend
+                setFlowerName("")
+                setFlowerHours("")
+            }
+        }catch(error) {
+            console.error("Failed to fetch flowers", error)
+        }
     }
 
-    const removeFlower = (id: string) => {
-        setFlowers(flowers.filter(f => f.id !== id))
+    const removeFlower = async (id: string) => {
+        try {
+            const response = await fetch(`${API_URL}/flowers/${id}`, {
+                method: "DELETE",
+            })
+            if (response.ok) {
+                await fetchFlowers() // Refresh list
+            }
+        } catch (error) {
+            console.error("Failed to delete flowers", error)
+        }
     }
 
     return (
@@ -183,7 +208,9 @@ export function TickTock() {
                         }}
                         onClick={(e) => {
                             e.stopPropagation()
-                            removeFlower(flower.id)
+                            if(isAuthenticated) {
+                                removeFlower(flower.id)
+                            }
                         }}
                     >
                         <Image
