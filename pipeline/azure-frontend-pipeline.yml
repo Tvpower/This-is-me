@@ -14,10 +14,6 @@ parameters:
   - name: buildConfiguration
     displayName: Build Configuration
     type: string
-    default: Release
-    values:
-      - release
-      - debug
 
 variables:
   frontendImageName: 'tvpow3r/frontend-app'
