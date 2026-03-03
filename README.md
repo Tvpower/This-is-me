@@ -4,6 +4,7 @@ Hi, if you found this repo, it means that you have found my personal website!
 A couple things about it...
 - I am always updating it with some stupid new idea that comes to mind
 - There is tons of messy work I need to clean up at some point :3
+- The DevOps stuff like Docker, Kubernetes, and Azure DevOps is a work in progress not fully implemented in a live version
 - Make sure you check out the live version at [this-is-me.dev](https://this-is-me.dev/)
 
 ---
