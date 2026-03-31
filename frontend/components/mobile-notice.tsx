@@ -68,7 +68,7 @@ export function MobileNotice() {
                 >
                     You might have opened my site on mobile and that&apos;s ok!
                     <br />
-                    But I didn&apos;t do my portfolio with the intention of having mobile
+                    But I didn&apos;t design my portfolio with the intention of having mobile
                     responsiveness. I believe it ruins my aesthetic.
                 </p>
 
