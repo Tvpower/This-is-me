@@ -8,6 +8,7 @@ import { CRTFrontScreen } from "@/components/crt-front-screen"
 import { About } from "@/components/about"
 import { Blog } from "@/components/blog"
 import { TickTock } from "@/components/Tick-tock";
+import { MobileNotice } from "@/components/mobile-notice";
 
 export default function Home() {
     const [showFrontScreen, setShowFrontScreen] = useState(true)
@@ -64,6 +65,7 @@ export default function Home() {
 
     return (
         <div className="relative min-h-screen w-full bg-black text-white overflow-hidden">
+            <MobileNotice />
             <GlitchOverlay />
             <div className="relative z-20 h-screen w-full">
                 {/* Full CRT TV container */}

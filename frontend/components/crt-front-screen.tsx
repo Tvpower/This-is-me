@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { Jumpscare } from "@/components/jumpscare"
 import { GlitchText } from "@/components/glitch-text"
@@ -14,6 +15,7 @@ export function CRTFrontScreen({ onMenuSelect, fullscreen = false }: CRTFrontScr
   const [isOn, setIsOn] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const [showJumpscare, setShowJumpscare] = useState(false)
+  const [pressedKey, setPressedKey] = useState<"up" | "down" | null>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const tvRef = useRef<HTMLDivElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
@@ -66,7 +68,9 @@ export function CRTFrontScreen({ onMenuSelect, fullscreen = false }: CRTFrontScr
 
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         e.preventDefault()
-        const prev = activeIndex
+        const direction = e.key === "ArrowUp" ? "up" : "down"
+        setPressedKey(direction)
+        setTimeout(() => setPressedKey(null), 150)
 
         if (e.key === "ArrowUp") {
           setActiveIndex(prev => (prev > 0 ? prev - 1 : prev))
@@ -203,6 +207,49 @@ export function CRTFrontScreen({ onMenuSelect, fullscreen = false }: CRTFrontScr
                 )}>
                   <header>
                     Main Menu
+                    <div className="flex flex-row items-center gap-1 ml-auto relative" style={{ zIndex: 10 }}>
+                      <span className="mr-1">{'->'}</span>
+                      <button
+                        onMouseDown={() => { setPressedKey("up"); setActiveIndex(prev => (prev > 0 ? prev - 1 : prev)) }}
+                        onMouseUp={() => setTimeout(() => setPressedKey(null), 150)}
+                        onMouseLeave={() => setPressedKey(null)}
+                        className="cursor-pointer select-none focus:outline-none relative"
+                        style={{ zIndex: 10 }}
+                      >
+                        <Image
+                          src="/pkl_lite_keys_0_one_arrow_up.png"
+                          alt="Arrow Up"
+                          width={36}
+                          height={36}
+                          className={cn(
+                            "transition-all duration-75",
+                            pressedKey === "up"
+                              ? "opacity-100 scale-90 brightness-150 drop-shadow-[0_0_6px_rgba(231,224,92,0.9)]"
+                              : "opacity-60 hover:opacity-100 hover:brightness-125"
+                          )}
+                        />
+                      </button>
+                      <button
+                        onMouseDown={() => { setPressedKey("down"); setActiveIndex(prev => (prev < menuOptions.length - 1 ? prev + 1 : prev)) }}
+                        onMouseUp={() => setTimeout(() => setPressedKey(null), 150)}
+                        onMouseLeave={() => setPressedKey(null)}
+                        className="cursor-pointer select-none focus:outline-none relative"
+                        style={{ zIndex: 10 }}
+                      >
+                        <Image
+                          src="/pkl_lite_keys_0_one_arrow_down.png"
+                          alt="Arrow Down"
+                          width={36}
+                          height={36}
+                          className={cn(
+                            "transition-all duration-75",
+                            pressedKey === "down"
+                              ? "opacity-100 scale-90 brightness-150 drop-shadow-[0_0_6px_rgba(231,224,92,0.9)]"
+                              : "opacity-60 hover:opacity-100 hover:brightness-125"
+                          )}
+                        />
+                      </button>
+                    </div>
                   </header>
                   
                   <ul>
