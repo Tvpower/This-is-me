@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import '@sakun/system.css/dist/system.css'
 import './globals.css'
 
 export const metadata: Metadata = {

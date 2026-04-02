@@ -9,25 +9,19 @@ const organizations = [
     id: 1,
     name: "Diablo Valley College Deep Learning Society",
     role: "Vice-president · Jun 2023",
-    description: "Working closely with the president to lead this student organization dedicated to artificial intelligence and machine learning. Responsible for coordinating technical workshops, managing collaborative projects, and organizing guest speaker events from industry professionals. Helped develop the society's strategic direction and growth initiatives while fostering an inclusive learning environment for members of all skill levels. Actively contributed to various deep learning projects exploring neural networks, computer vision, and natural language processing applications. Cultivated partnerships with local tech companies to create networking and internship opportunities for society members. Collaborated with other officers to promote the organization across campus and increase membership engagement through social media and outreach events."
+    description: "Co-led a student org focused on AI/ML — ran technical workshops, coordinated deep learning projects across computer vision and NLP, organized guest speaker events, and built partnerships with local tech companies for networking and internship opportunities."
   },
   {
     id: 2,
     name: "Associated Students of Diablo Valley College (ASDVC)",
     role: "Technology Chair · May 2023",
-    description: "Served as Technology Chair Assistant for the Associated Students of Diablo Valley College, providing technical support and digital solutions for student government initiatives and campus-wide events. Collaborated closely with the Technology Chair to manage the organization's digital infrastructure, including website maintenance, social media presence, and virtual event platforms. Assisted in implementing technological improvements to streamline student government operations and enhance communication with the student body. Provided technical expertise during ASDVC meetings and events, troubleshooting issues and ensuring smooth execution of digital presentations and virtual components. Participated in committee discussions regarding technological advancements beneficial to student services and campus life. Helped document and archive digital records of student government activities, creating a more accessible information system for future ASDVC members and the broader campus community."
+    description: "Managed the digital infrastructure for student government — website maintenance, social media, and virtual event platforms. Provided technical support during meetings and events, and helped implement tools to streamline operations and improve communication with the student body."
   },
   {
     id: 3,
-    name: "CSUF ACM",
-    role: "Member",
-    description: "Active member of CSUF's ACM chapter, participating in technical workshops, hackathons, and networking events. Collaborating with peers on computing projects and engaging with the latest developments in computer science through this professional organization."
-  },
-  {
-    id: 4,
     name: "Overwatch World Cup - Team Colombia",
     role: "Player / Top 500 Competitor",
-    description: "Represented Colombia in the Overwatch World Cup, competing at a high level and consistently maintaining a Top 500 rank. Had the incredible opportunity to meet and interact with world-class talent when Team Colombia was invited to participate in events held in Anaheim, CA."
+    description: "Represented Colombia in the Overwatch World Cup as a Top 500 competitor. Competed alongside world-class players at events held in Anaheim, CA."
   }
 ];
 
@@ -45,29 +39,29 @@ export function About() {
 
       <div className="bg-black/70 p-6 rounded-lg scanlines-inner mb-12 relative overflow-hidden">
         <h3 className="text-2xl font-semibold mb-4 border-b-2 border-green-500 pb-2">
-          <GlitchText text="Pilot in Training & Hobbies" isActive={shouldGlitchRandomly()} />
+          <GlitchText text="Life && Hobbies" isActive={shouldGlitchRandomly()} />
         </h3>
         <p className="text-lg mb-3 leading-relaxed">
-          <GlitchText text="I'm currently training to get my pilot license, embracing the thrill of aviation and aerospace." isActive={shouldGlitchRandomly()} intensity="low" />
+          <GlitchText text="I am currently working as a Infrastructure engineer for Provista Software Corporation" isActive={shouldGlitchRandomly()} intensity="low" />
         </p>
         <p className="text-lg mb-3 leading-relaxed">
-          <GlitchText text="Beyond the cockpit and the code, I was a former Overwatch World Cup player for Team Colombia and consistently ranked in the Top 500." isActive={shouldGlitchRandomly()} intensity="low" />
+          <GlitchText text="I was a former Overwatch World Cup player for Team Colombia and consistently ranked in the Top 500. I was also training to get Private Pilot License" isActive={shouldGlitchRandomly()} intensity="low" />
         </p>
         <p className="text-lg mb-3 leading-relaxed">
-          <GlitchText text="Beyond the skies, my interests are quite diverse:" isActive={shouldGlitchRandomly()} intensity="low" />
+          <GlitchText text="Beyond the skies and my computer, my interests are quite diverse:" isActive={shouldGlitchRandomly()} intensity="low" />
         </p>
         <ul className="list-disc list-inside pl-4 mb-4 space-y-2 text-md">
           {[
             "My wonderful girlfriend/wife",
             "Exploring the frontiers of Machine Learning",
-            "The adrenaline rush of FPV Drones",
-            "Designing and interacting with 3D Simulation Environments",
-            "Analyzing the dynamics of Financial Markets",
-            "Building and programming Robotics",
-            "Developing Embedded Systems",
+            "Drones",
+            "3D Simulation Environments",
+            "Monitoring the situation",
+            "Programming in holy C",
+            "Playing around with embedded",
             "Working out at the gym",
-            "Immersing myself in video games",
-            "Appreciating cinematic scenes full of thrilling stories"
+            "Video games (not so often)",
+            "Flying planes"
           ].map((hobby, index) => (
             <li key={index} className="hover:text-red-400 transition-colors duration-150">
               <GlitchText text={hobby} isActive={shouldGlitchRandomly()} intensity="low" />
@@ -126,6 +120,106 @@ export function About() {
         </div>
       </div>
 
+      {/* NCSA Mosaic Browser Section — powered by system.css */}
+      <div className="mb-12">
+        <p className="text-center text-green-500/30 text-xs mb-3 tracking-[0.3em] uppercase font-mono">
+          <GlitchText text="circa 1993" isActive={shouldGlitchRandomly()} intensity="low" />
+        </p>
+        <div className="mosaic-wrapper">
+          {/* Mac System Menu Bar — system.css ul[role="menu-bar"] */}
+          <ul role="menu-bar">
+            <li role="menu-item" tabIndex={0} aria-haspopup="false">
+              <span className="apple"></span>
+            </li>
+            <li role="menu-item" tabIndex={0} aria-haspopup="true">
+              File
+              <ul role="menu">
+                <li role="menu-item"><a href="#about">New Window</a></li>
+                <li role="menu-item"><a href="#about">Open URL...</a></li>
+                <li role="menu-item" className="divider"><a href="#about">Close</a></li>
+                <li role="menu-item"><a href="#about">Quit</a></li>
+              </ul>
+            </li>
+            <li role="menu-item" tabIndex={0} aria-haspopup="true">
+              Edit
+              <ul role="menu">
+                <li role="menu-item"><a href="#about">Copy</a></li>
+                <li role="menu-item"><a href="#about">Paste</a></li>
+              </ul>
+            </li>
+            <li role="menu-item" tabIndex={0} aria-haspopup="true">
+              Options
+              <ul role="menu">
+                <li role="menu-item"><a href="#about">Preferences</a></li>
+              </ul>
+            </li>
+            <li role="menu-item" tabIndex={0} aria-haspopup="true">
+              Navigate
+              <ul role="menu">
+                <li role="menu-item"><a href="#about">Back</a></li>
+                <li role="menu-item"><a href="#about">Forward</a></li>
+                <li role="menu-item"><a href="#about">Home</a></li>
+              </ul>
+            </li>
+            <li role="menu-item" tabIndex={0} aria-haspopup="false">Annotate</li>
+          </ul>
+
+          {/* Browser Window — system.css .window */}
+          <div className="window" style={{ margin: 0, width: '100%' }}>
+            <div className="title-bar">
+              <button aria-label="Close" className="close"></button>
+              <h1 className="title">Mario&apos;s Web Space</h1>
+              <button aria-label="Resize" className="resize"></button>
+            </div>
+            <div className="separator"></div>
+
+            {/* Toolbar — system.css .details-bar + .btn */}
+            <div className="details-bar">
+              <div style={{ display: 'flex', gap: '4px' }}>
+                <button className="btn" title="Back">◄</button>
+                <button className="btn" title="Forward">►</button>
+                <button className="btn" title="Reload">↺</button>
+                <button className="btn" title="Home">⌂</button>
+                <button className="btn" title="Open">⊞</button>
+                <button className="btn" title="Save">⊡</button>
+              </div>
+              <select>
+                <option>Mario&apos;s Web Space</option>
+              </select>
+            </div>
+
+            {/* URL Bar — system.css .details-bar + .field-row */}
+            <div className="details-bar">
+              <section className="field-row" style={{ justifyContent: 'flex-start', width: '100%' }}>
+                <label>URL:</label>
+                <input type="text" style={{ width: '100%' }} defaultValue="http://mario.dev/" readOnly />
+              </section>
+            </div>
+
+            {/* Status Line */}
+            <div className="details-bar mosaic-status">
+              Data transfer complete
+            </div>
+
+            {/* Content — system.css .window-pane */}
+            <div className="window-pane">
+              <h2>Welcome to Mario&apos;s Web Space</h2>
+              <p>
+                Infrastructure Engineer at Provista Software Corporation.
+                Former Overwatch World Cup player for Team Colombia — Top 500 competitor.
+                Currently training for a Private Pilot License.
+              </p>
+              <p>
+                This page is best viewed with NCSA Mosaic 3.0 at 1024×768 resolution.
+              </p>
+              <p><a href="#about">Learn more</a></p>
+              <hr />
+              <p className="mosaic-visitor">You are visitor #00001337 · Last updated: Jun 2025</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <style jsx>{`
         .scanlines-inner {
             position: relative;
@@ -154,9 +248,101 @@ export function About() {
         .animation-delay-300 { animation-delay: 300ms; }
         .animation-delay-500 { animation-delay: 500ms; }
         .animation-delay-600 { animation-delay: 600ms; }
+
+        /* ===== NCSA Mosaic Dark Theme — system.css variable overrides ===== */
+        .mosaic-wrapper {
+          --primary: #111111;
+          --secondary: #22c55e;
+          --tertiary: #4ade80;
+          --disabled: #22c55e60;
+          --box-shadow: 2px 2px rgba(34, 197, 94, 0.2);
+          max-width: 48rem;
+          margin: 0 auto;
+          box-shadow: 0 0 40px rgba(34, 197, 94, 0.08), 0 0 2px rgba(34, 197, 94, 0.2);
+        }
+        .mosaic-wrapper :global(.window) {
+          color: #4ade80;
+          min-width: unset;
+        }
+        .mosaic-wrapper :global(.title-bar .title) {
+          text-shadow: 0 0 6px rgba(34, 197, 94, 0.3);
+        }
+        .mosaic-wrapper :global(.btn) {
+          border-image: none !important;
+          border: 1px solid #22c55e50;
+          border-color: #22c55e50 #22c55e20 #22c55e20 #22c55e50;
+          min-width: unset;
+          min-height: unset;
+          padding: 2px 8px;
+          font-size: 12px;
+        }
+        .mosaic-wrapper :global(.btn:active) {
+          border-radius: 0;
+          border-color: #22c55e20 #22c55e50 #22c55e50 #22c55e20;
+        }
+        .mosaic-wrapper :global(select) {
+          box-shadow: none;
+          width: auto;
+          min-width: 150px;
+          font-size: 12px;
+          padding-left: 8px;
+          background-image: none;
+        }
+        .mosaic-wrapper :global(input) {
+          font-size: 12px;
+        }
+        .mosaic-wrapper :global(input[type="text"]:focus-visible) {
+          background: #050505;
+          color: #4ade80;
+        }
+        .mosaic-wrapper :global(.field-row) {
+          font-size: 12px;
+        }
+        .mosaic-wrapper :global(ul[role="menu"]) {
+          color: #22c55e;
+        }
+        .mosaic-wrapper :global(ul[role="menu"] > [role="menu-item"] > a) {
+          color: #22c55e;
+        }
+        .mosaic-wrapper :global(.details-bar) {
+          font-size: 12px;
+        }
+        .mosaic-wrapper :global(.window-pane) {
+          color: #4ade80;
+          font-size: 14px;
+        }
+        .mosaic-wrapper :global(.window-pane h2) {
+          color: #22c55e;
+          text-shadow: 0 0 8px rgba(34, 197, 94, 0.35);
+        }
+        .mosaic-wrapper :global(.window-pane p) {
+          color: #4ade80cc;
+          margin-bottom: 8px;
+        }
+        .mosaic-wrapper :global(.window-pane a) {
+          color: #ef4444;
+        }
+        .mosaic-wrapper :global(.window-pane a:hover) {
+          color: #f87171;
+        }
+        .mosaic-wrapper :global(.window-pane hr) {
+          border-color: #22c55e20;
+          margin: 16px 0;
+        }
+        .mosaic-wrapper :global(.apple) {
+          filter: invert(48%) sepia(79%) saturate(390%) hue-rotate(86deg) brightness(118%) contrast(85%);
+        }
+        .mosaic-status {
+          font-size: 10px !important;
+          color: #4ade80aa !important;
+        }
+        .mosaic-visitor {
+          font-size: 10px;
+          color: #4ade8060;
+        }
       `}</style>
     </section>
   );
 }
 
-export default About; 
+export default About;
